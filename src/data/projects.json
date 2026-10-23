@@ -176,6 +176,138 @@
           "files": ["app/export.py"]
         }
       ]
+    },
+    {
+      "id": "ai-knowledge-assistant",
+      "repository_id": 100000001,
+      "name": "AI Knowledge Assistant",
+      "description": "A retrieval-augmented generation system that answers questions using relevant document context.",
+      "overview": "Ingests PDFs and Markdown files, splits them into chunks, embeds them into a FAISS index, and answers questions with a Gemini model using the retrieved passages as context. Answers cite the source chunks they relied on.",
+      "features": [
+        "Document ingestion for PDF and Markdown",
+        "Semantic retrieval over a local FAISS index",
+        "Answers with source citations",
+        "Command-line and small web interface"
+      ],
+      "primary_category": "ai-llm",
+      "tags": ["RAG", "Developer Tools"],
+      "tech_stack": ["Python", "LangChain", "Gemini", "FAISS"],
+      "repository_url": "https://github.com/your-username/ai-knowledge-assistant",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2026-08-14",
+      "last_updated": "2026-10-20",
+      "last_analyzed_commit": "e41c9a7d2b0f6c3a58d1e9f4b7a2c6d0e8f13b95",
+      "confidence": 0.93,
+      "needs_review": false,
+      "evidence": [
+        { "claim": "Uses FAISS for vector search", "source": "requirements.txt, src/retriever.py" },
+        { "claim": "Answers include source citations", "source": "src/answer.py" }
+      ],
+      "updates": [
+        {
+          "commit": "e41c9a7d2b0f6c3a58d1e9f4b7a2c6d0e8f13b95",
+          "date": "2026-10-20",
+          "type": "feature",
+          "summary": "Added semantic retrieval so answers draw on the most relevant document chunks instead of keyword matches.",
+          "files": ["src/retriever.py", "src/index.py"]
+        },
+        {
+          "commit": "9b3f0d1a6e8c4527f0a1d3b5c7e9f2a4b6d8c0e1",
+          "date": "2026-09-30",
+          "type": "feature",
+          "summary": "Responses now list the source passages they were based on.",
+          "files": ["src/answer.py"]
+        },
+        {
+          "commit": "5c7a2e90b1d4f6385a9c0e2b4d6f8a1c3e5b7d90",
+          "date": "2026-08-14",
+          "type": "other",
+          "summary": "Initial ingestion pipeline for PDF and Markdown files.",
+          "files": ["src/ingest.py"]
+        }
+      ]
+    },
+    {
+      "id": "surface-defect-detector",
+      "repository_id": 100000002,
+      "name": "Surface Defect Detector",
+      "description": "A convolutional model that flags scratches and dents in photos of machined parts.",
+      "overview": "Trains a small CNN on a labeled image set of metal parts and serves predictions through a command-line tool. Includes an evaluation script that reports precision and recall per defect class.",
+      "features": [
+        "Training script with augmentation",
+        "Per-class precision and recall report",
+        "Batch inference over a folder of images"
+      ],
+      "primary_category": "ml",
+      "tags": ["Computer Vision"],
+      "tech_stack": ["Python", "PyTorch", "OpenCV"],
+      "repository_url": "https://github.com/your-username/surface-defect-detector",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2026-06-02",
+      "last_updated": "2026-09-11",
+      "last_analyzed_commit": "2d8e4a6c0b1f3957e1a3c5d7f9b0e2a4c6d8f013",
+      "confidence": 0.88,
+      "needs_review": false,
+      "evidence": [
+        { "claim": "Implements a CNN in PyTorch", "source": "model/cnn.py" }
+      ],
+      "updates": [
+        {
+          "commit": "2d8e4a6c0b1f3957e1a3c5d7f9b0e2a4c6d8f013",
+          "date": "2026-09-11",
+          "type": "performance",
+          "summary": "Batched inference cut folder scan time by running images through the model together.",
+          "files": ["predict.py"]
+        },
+        {
+          "commit": "7e1b3d5f9a0c2468b0d2f4a6c8e0b1d3f5a7c9e2",
+          "date": "2026-07-19",
+          "type": "fix",
+          "summary": "Fixed an off-by-one in the evaluation script that skewed recall for the smallest class.",
+          "files": ["evaluate.py"]
+        }
+      ]
+    },
+    {
+      "id": "tiny-kv-store",
+      "repository_id": 100000003,
+      "name": "Tiny KV Store",
+      "description": "A log-structured key-value store with compaction, written for a databases course.",
+      "overview": "Appends writes to a log file, keeps an in-memory index of key offsets, and periodically compacts old segments. Built to understand how storage engines trade write speed against read cost.",
+      "features": [
+        "Append-only write log",
+        "In-memory offset index",
+        "Segment compaction",
+        "Crash recovery by replaying the log"
+      ],
+      "primary_category": "cs-fundamentals",
+      "tags": ["Databases", "Coursework"],
+      "tech_stack": ["Rust"],
+      "repository_url": "https://github.com/your-username/tiny-kv-store",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2026-03-09",
+      "last_updated": "2026-04-22",
+      "last_analyzed_commit": "c3a5e7091b2d4f6a8c0e1b3d5f7a9c2e4b6d8f01",
+      "confidence": 0.9,
+      "needs_review": false,
+      "evidence": [
+        { "claim": "Compacts segments", "source": "src/compaction.rs" }
+      ],
+      "updates": [
+        {
+          "commit": "c3a5e7091b2d4f6a8c0e1b3d5f7a9c2e4b6d8f01",
+          "date": "2026-04-22",
+          "type": "feature",
+          "summary": "Added segment compaction to reclaim space from overwritten and deleted keys.",
+          "files": ["src/compaction.rs"]
+        }
+      ]
     }
   ]
 }
