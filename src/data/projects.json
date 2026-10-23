@@ -178,8 +178,8 @@
       ]
     },
     {
-      "id": "ai-knowledge-assistant",
-      "repository_id": 100000001,
+      "id": "ai-knowledge-assistant1",
+      "repository_id": 100000005,
       "name": "AI Knowledge Assistant",
       "description": "A retrieval-augmented generation system that answers questions using relevant document context.",
       "overview": "Ingests PDFs and Markdown files, splits them into chunks, embeds them into a FAISS index, and answers questions with a Gemini model using the retrieved passages as context. Answers cite the source chunks they relied on.",
@@ -192,7 +192,7 @@
       "primary_category": "ai-llm",
       "tags": ["RAG", "Developer Tools"],
       "tech_stack": ["Python", "LangChain", "Gemini", "FAISS"],
-      "repository_url": "https://github.com/your-username/ai-knowledge-assistant",
+      "repository_url": "https://github.com/your-username/ai-knowledge-assistant1",
       "demo_url": null,
       "image": null,
       "status": "active",
@@ -230,8 +230,8 @@
       ]
     },
     {
-      "id": "surface-defect-detector",
-      "repository_id": 100000002,
+      "id": "surface-defect-detector1",
+      "repository_id": 100000006,
       "name": "Surface Defect Detector",
       "description": "A convolutional model that flags scratches and dents in photos of machined parts.",
       "overview": "Trains a small CNN on a labeled image set of metal parts and serves predictions through a command-line tool. Includes an evaluation script that reports precision and recall per defect class.",
@@ -243,7 +243,7 @@
       "primary_category": "ml",
       "tags": ["Computer Vision"],
       "tech_stack": ["Python", "PyTorch", "OpenCV"],
-      "repository_url": "https://github.com/your-username/surface-defect-detector",
+      "repository_url": "https://github.com/your-username/surface-defect-detector1",
       "demo_url": null,
       "image": null,
       "status": "active",
@@ -273,8 +273,8 @@
       ]
     },
     {
-      "id": "tiny-kv-store",
-      "repository_id": 100000003,
+      "id": "tiny-kv-store1",
+      "repository_id": 100000007,
       "name": "Tiny KV Store",
       "description": "A log-structured key-value store with compaction, written for a databases course.",
       "overview": "Appends writes to a log file, keeps an in-memory index of key offsets, and periodically compacts old segments. Built to understand how storage engines trade write speed against read cost.",
@@ -287,7 +287,7 @@
       "primary_category": "cs-fundamentals",
       "tags": ["Databases", "Coursework"],
       "tech_stack": ["Rust"],
-      "repository_url": "https://github.com/your-username/tiny-kv-store",
+      "repository_url": "https://github.com/your-username/tiny-kv-store1",
       "demo_url": null,
       "image": null,
       "status": "active",
