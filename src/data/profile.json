@@ -1,0 +1,13 @@
+{
+  "name": "Neeharika Maram",
+  "headline": "Software engineer building AI systems and the plumbing around them.",
+  "about": [
+    "I build LLM applications, machine learning projects, and backend systems. This site is generated from my GitHub activity: new repositories and meaningful commits are analyzed, summarized, and added here after review.",
+    "Everything below is kept current by an automated pipeline. Each project links to its source and shows how it has changed over time."
+  ],
+  "links": [
+    { "label": "GitHub", "url": "https://github.com/codingfreshie" },
+    { "label": "LinkedIn", "url": "https://www.linkedin.com/in/neeharika-maram" },
+    { "label": "Email", "url": "neeharika9work@gmail.com" }
+  ]
+}

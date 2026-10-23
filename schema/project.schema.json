@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "autoportfolio/projects",
+  "title": "AutoPortfolio projects file",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "projects"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "projects": { "type": "array", "items": { "$ref": "#/definitions/project" } }
+  },
+  "definitions": {
+    "sha": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+    "date": { "type": "string", "format": "date" },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "repository_id", "name", "description", "primary_category",
+        "tags", "tech_stack", "repository_url", "status", "created_at",
+        "last_updated", "last_analyzed_commit", "confidence", "needs_review",
+        "updates"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 80 },
+        "repository_id": { "type": "integer", "minimum": 1 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "description": { "type": "string", "minLength": 10, "maxLength": 300 },
+        "overview": { "type": ["string", "null"], "maxLength": 2000 },
+        "features": { "type": "array", "maxItems": 12, "items": { "type": "string", "maxLength": 200 } },
+        "primary_category": { "type": "string" },
+        "tags": { "type": "array", "maxItems": 8, "uniqueItems": true, "items": { "type": "string", "maxLength": 40 } },
+        "tech_stack": { "type": "array", "maxItems": 16, "uniqueItems": true, "items": { "type": "string", "maxLength": 40 } },
+        "repository_url": { "type": "string", "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+        "demo_url": { "type": ["string", "null"], "pattern": "^https://" },
+        "image": { "type": ["string", "null"], "pattern": "^images/[A-Za-z0-9_.-]+\\.(png|jpg|jpeg|webp|svg)$" },
+        "status": { "enum": ["active", "archived"] },
+        "created_at": { "$ref": "#/definitions/date" },
+        "last_updated": { "$ref": "#/definitions/date" },
+        "last_analyzed_commit": { "$ref": "#/definitions/sha" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "needs_review": { "type": "boolean" },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["claim", "source"],
+            "properties": {
+              "claim": { "type": "string", "maxLength": 300 },
+              "source": { "type": "string", "maxLength": 300 }
+            }
+          }
+        },
+        "updates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["commit", "date", "type", "summary"],
+            "properties": {
+              "commit": { "$ref": "#/definitions/sha" },
+              "date": { "$ref": "#/definitions/date" },
+              "type": { "enum": ["feature", "fix", "refactor", "test", "docs", "performance", "other"] },
+              "summary": { "type": "string", "minLength": 10, "maxLength": 400 },
+              "files": { "type": "array", "maxItems": 20, "items": { "type": "string", "maxLength": 200 } }
+            }
+          }
+        }
+      }
+    }
+  }
+}

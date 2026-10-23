@@ -1,0 +1,26 @@
+name: Portfolio agent
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # daily at 06:00 UTC
+  workflow_dispatch:       # manual "Run workflow" button
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: portfolio-agent
+  cancel-in-progress: false
+
+jobs:
+  run-agent:
+    # Scheduled runs only happen when the switch is on.
+    # Manual runs always work, so you can test while it's off.
+    if: github.event_name == 'workflow_dispatch' || vars.AUTOMATION_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Placeholder
+        run: echo "Agent would run here. AUTOMATION_ENABLED=${{ vars.AUTOMATION_ENABLED }}"
