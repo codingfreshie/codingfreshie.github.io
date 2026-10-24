@@ -35,9 +35,15 @@ class Settings:
     gemini_model: str = "gemini-3.1-flash-lite"
     min_seconds_between_calls: float = 7.0
     min_confidence: float = 0.6
+    ambiguity_max_confidence: float = 0.85
     exclude_repos: frozenset = frozenset()
     max_new_repos_per_run: int = 5
     limits: Limits = Limits()
+
+    def is_excluded(self, full_name: str) -> bool:
+        """True for 'owner/name' or bare 'name', case-insensitive."""
+        n = full_name.lower()
+        return n in self.exclude_repos or n.rsplit("/", 1)[-1] in self.exclude_repos
 
 
 def load_settings(path: Path | str | None = None) -> Settings:
@@ -62,6 +68,7 @@ def load_settings(path: Path | str | None = None) -> Settings:
         gemini_model=str(raw.get("gemini_model", "gemini-3.1-flash-lite")),
         min_seconds_between_calls=float(raw.get("min_seconds_between_calls", 7.0)),
         min_confidence=float(raw.get("min_confidence", 0.6)),
+        ambiguity_max_confidence=float(raw.get("ambiguity_max_confidence", 0.85)),
         exclude_repos=frozenset(excludes),
         max_new_repos_per_run=int(raw.get("max_new_repos_per_run", 5)),
         limits=limits,

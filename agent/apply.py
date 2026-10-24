@@ -17,15 +17,18 @@ def node_validator() -> tuple[bool, str]:
     return done.returncode == 0, (done.stdout + done.stderr).strip()
 
 
-def apply_drafts(drafts_dir: Path, projects_path: Path, validator=node_validator) -> dict:
+def apply_drafts(drafts_dir: Path, projects_path: Path, validator=node_validator, is_excluded=lambda name: False) -> dict:
     original = Path(projects_path).read_text("utf-8")
     data = json.loads(original)
     repo_ids = {p["repository_id"] for p in data["projects"]}
     ids = {p["id"] for p in data["projects"]}
-    added, skipped = [], []
+    added, skipped, excluded = [], [], []
 
     for path in sorted(Path(drafts_dir).glob("draft-*.json")):
         project = json.loads(path.read_text("utf-8"))["project"]
+        if is_excluded(project["repository_url"].removeprefix("https://github.com/")):
+            excluded.append(project["id"])
+            continue
         if project["repository_id"] in repo_ids:
             skipped.append(project["id"])
             continue
@@ -36,11 +39,11 @@ def apply_drafts(drafts_dir: Path, projects_path: Path, validator=node_validator
         added.append(project["id"])
 
     if not added:
-        return {"added": [], "skipped": skipped, "ok": True, "output": "Nothing new to add."}
+        return {"added": [], "skipped": skipped, "excluded": excluded, "ok": True, "output": "Nothing new to add."}
 
     Path(projects_path).write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", "utf-8")
     ok, output = validator()
     if not ok:
         Path(projects_path).write_text(original, "utf-8")   # never leave invalid data behind
-        return {"added": [], "skipped": skipped, "ok": False, "output": output}
-    return {"added": added, "skipped": skipped, "ok": True, "output": output}
+        return {"added": [], "skipped": skipped, "excluded": excluded, "ok": False, "output": output}
+    return {"added": added, "skipped": skipped, "excluded": excluded, "ok": True, "output": output}

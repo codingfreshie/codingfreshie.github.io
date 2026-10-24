@@ -44,7 +44,8 @@ def analyze_bundle(gemini: GeminiClient, bundle: dict, categories: list[dict], t
             feedback, last = str(exc), exc
             log.warning("event=validation_failed repo=%s reason=%s", bundle["repo"]["full_name"], exc)
             continue
-        return build_project(bundle, cleaned, dropped, taken_ids, settings.min_confidence, gemini.model)
+        return build_project(bundle, cleaned, dropped, taken_ids, settings.min_confidence, gemini.model,
+                         settings.ambiguity_max_confidence)
     raise last
 
 
@@ -69,11 +70,14 @@ def cmd_run(args, settings: Settings) -> int:
     gemini = GeminiClient(settings.gemini_model, min_interval=settings.min_seconds_between_calls)
 
     made, failed, count = [], [], 0
-    in_portfolio, has_draft = [], []
+    in_portfolio, has_draft, excluded = [], [], []
     for path in bundles:
         bundle = json.loads(path.read_text("utf-8"))
         rid, name = bundle["repo"]["id"], bundle["repo"]["full_name"]
         draft_path = args.out / "drafts" / f"draft-{rid}.json"
+        if settings.is_excluded(name):
+            excluded.append(name)
+            continue
         if rid in done_repos:
             in_portfolio.append(name)
             continue
@@ -97,6 +101,16 @@ def cmd_run(args, settings: Settings) -> int:
         log.info("event=analyzed repo=%s category=%s confidence=%s review=%s", name,
                  draft["project"]["primary_category"], draft["project"]["confidence"], draft["project"]["needs_review"])
 
+    log_path = args.out / "analysis_log.json"
+    try:
+        log_data = json.loads(log_path.read_text("utf-8"))
+    except (OSError, ValueError):
+        log_data = {}
+    for d in made:
+        log_data.pop(d["project"].get("repository_url", "").replace("https://github.com/", ""), None)
+    log_data.update({name: err[:200] for name, err in failed})
+    _write(log_path, log_data)
+
     print(f"\nDrafts written: {len(made)}   failed: {len(failed)}")
     for d in made:
         p = d["project"]
@@ -107,6 +121,8 @@ def cmd_run(args, settings: Settings) -> int:
     if in_portfolio:
         print(f"\nSkipped {len(in_portfolio)} already in src/data/projects.json (--force does not apply to these; "
               f"remove them from that file to re-analyze): {', '.join(in_portfolio)}")
+    if excluded:
+        print(f"\nSkipped {len(excluded)} listed in exclude_repos: {', '.join(excluded)}")
     if has_draft:
         print(f"\nSkipped {len(has_draft)} that already have drafts (use --force to redo): {', '.join(has_draft)}")
     print("\nNext: `python -m agent.analyze show` to read them, then `python -m agent.analyze apply`.")
@@ -135,11 +151,12 @@ def main(argv: list[str] | None = None) -> int:
             print("\n".join(render_draft(d) for d in drafts))
             return 0
         if args.command == "apply":
-            result = apply_drafts(args.out / "drafts", PROJECTS_PATH)
+            result = apply_drafts(args.out / "drafts", PROJECTS_PATH, is_excluded=load_settings().is_excluded)
             if not result["ok"]:
                 print("Validation failed, so projects.json was left unchanged:\n" + result["output"])
                 return 1
-            print(f"Added {len(result['added'])}: {', '.join(result['added']) or '-'}   already present: {len(result['skipped'])}")
+            print(f"Added {len(result['added'])}: {', '.join(result['added']) or '-'}   already present: {len(result['skipped'])}"
+                  f"   excluded: {len(result['excluded'])}")
             if result["added"]:
                 print("Run `npm run dev` to see them on the site.")
             return 0
