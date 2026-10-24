@@ -51,3 +51,10 @@ python -m agent.sync apply            fixes renamed links; HIDES (never deletes)
 
 ## After any apply
 Commit and push `src/data/projects.json` (and `agent/settings.json` if `remove` changed it).
+
+## Everything in one go (what the GitHub automation runs)
+```
+python -m agent.pipeline run --dry-run   preview: analyze and print what would change, write nothing
+python -m agent.pipeline run             collect, analyze, track, sync, and apply; writes agent/out/pr-body.md
+```
+Setup for the scheduled GitHub version is in `agent/AUTOMATION.md`.
