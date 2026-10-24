@@ -31,7 +31,10 @@ export default function Project() {
 
       <header className="detail-head">
         <div>
-          <p className="cat-name">{cat.name}</p>
+          <p className="cat-name">
+            {cat.name}
+            {project.development_status === "in_progress" && <span className="badge info">In progress</span>}
+          </p>
           <h1>{project.name}</h1>
           <p className="lede">{project.description}</p>
           <div className="actions">
@@ -67,6 +70,21 @@ export default function Project() {
               <h2>Key features</h2>
               <ul className="plain">
                 {project.features.map((f) => (
+                  <li key={f}>{f}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {project.planned?.length > 0 && (
+            <section>
+              <h2>{project.development_status === "in_progress" ? "Planned" : "Future work"}</h2>
+              <p className="muted">
+                {project.development_status === "in_progress"
+                  ? "Goals for this project that the code does not show yet."
+                  : "Ideas and known limitations noted for this project."}
+              </p>
+              <ul className="plain">
+                {project.planned.map((f) => (
                   <li key={f}>{f}</li>
                 ))}
               </ul>
@@ -109,10 +127,12 @@ export default function Project() {
         </aside>
       </div>
 
-      <section>
-        <h2>Development timeline</h2>
-        <Timeline items={updates.map((update) => ({ update }))} />
-      </section>
+      {updates.length > 0 && (
+        <section>
+          <h2>Development timeline</h2>
+          <Timeline items={updates.map((update) => ({ update }))} />
+        </section>
+      )}
 
       {project.evidence?.length > 0 && (
         <section>

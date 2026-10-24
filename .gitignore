@@ -3,3 +3,9 @@ dist
 .env
 .env.*
 .DS_Store
+
+# agent
+agent/out/
+__pycache__/
+.pytest_cache/
+*.pyc

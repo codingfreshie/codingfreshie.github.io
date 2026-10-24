@@ -35,6 +35,8 @@
         "demo_url": { "type": ["string", "null"], "pattern": "^https://" },
         "image": { "type": ["string", "null"], "pattern": "^images/[A-Za-z0-9_.-]+\\.(png|jpg|jpeg|webp|svg)$" },
         "status": { "enum": ["active", "archived"] },
+        "development_status": { "enum": ["complete", "in_progress"] },
+        "planned": { "type": "array", "maxItems": 8, "items": { "type": "string", "maxLength": 200 } },
         "created_at": { "$ref": "#/definitions/date" },
         "last_updated": { "$ref": "#/definitions/date" },
         "last_analyzed_commit": { "$ref": "#/definitions/sha" },

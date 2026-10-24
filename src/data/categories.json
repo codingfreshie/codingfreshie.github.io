@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
   "categories": [
-    { "id": "ai-llm", "name": "AI & LLMs", "description": "AI agents, LLM applications, RAG, and generative AI.", "color": "#1F6F5C" },
-    { "id": "ml", "name": "Machine Learning", "description": "Machine learning, data modeling, and computer vision.", "color": "#3B5BDB" },
-    { "id": "cs-fundamentals", "name": "CS Fundamentals", "description": "Operating systems, databases, networking, algorithms, and coursework.", "color": "#A8561C" },
-    { "id": "software-engineering", "name": "Software Engineering", "description": "Backend systems, full-stack applications, APIs, and developer tools.", "color": "#7A3E9D" },
-    { "id": "cloud-devops", "name": "Cloud & DevOps", "description": "Infrastructure, deployment, containers, and CI/CD.", "color": "#B3365B" }
+    { "id": "ai-llm", "name": "AI & LLMs", "description": "AI agents, LLM applications, RAG, chatbots, and generative AI.", "color": "#1F6F5C" },
+    { "id": "ml", "name": "Data, ML & Quant", "description": "Machine learning, computer vision, data analysis, quantitative modeling, and simulation.", "color": "#3B5BDB" },
+    { "id": "cs-fundamentals", "name": "CS Fundamentals & Systems", "description": "Compilers, operating systems, databases, networking, algorithms, and coursework.", "color": "#A8561C" },
+    { "id": "software-engineering", "name": "Software Engineering", "description": "Web and full-stack apps, APIs, services, automation, and developer tools.", "color": "#7A3E9D" },
+    { "id": "cloud-devops", "name": "Cloud & DevOps", "description": "Infrastructure, containers, CI/CD, and deployment.", "color": "#B3365B" },
+    { "id": "other", "name": "Other & Experiments", "description": "Use only when no other category is a reasonable fit: games, hardware, one-off experiments.", "color": "#5C6B73" }
   ]
 }

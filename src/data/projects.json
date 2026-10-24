@@ -2,312 +2,1216 @@
   "schema_version": 1,
   "projects": [
     {
-      "id": "ai-knowledge-assistant",
-      "repository_id": 100000001,
-      "name": "AI Knowledge Assistant",
-      "description": "A retrieval-augmented generation system that answers questions using relevant document context.",
-      "overview": "Ingests PDFs and Markdown files, splits them into chunks, embeds them into a FAISS index, and answers questions with a Gemini model using the retrieved passages as context. Answers cite the source chunks they relied on.",
+      "id": "cold-mailing-agent-2",
+      "repository_id": 1020095941,
+      "name": "cold_mailing_agent",
+      "description": "An automated email generation and dispatch agent powered by Google Gemini and LangChain.",
+      "overview": "This project provides a framework for generating professional emails based on user-provided resume context and specific topics. It utilizes LangChain and LangGraph to orchestrate LLM-based content generation, structured output parsing, and SMTP-based email delivery.",
       "features": [
-        "Document ingestion for PDF and Markdown",
-        "Semantic retrieval over a local FAISS index",
-        "Answers with source citations",
-        "Command-line and small web interface"
+        "Generates structured email content using Google Gemini 1.5 Flash via LangChain.",
+        "Implements a state-based workflow using LangGraph to route tasks between email generation and search tools.",
+        "Supports automated email dispatch via Gmail SMTP.",
+        "Uses Pydantic models to enforce structured JSON output for email subjects and bodies."
       ],
       "primary_category": "ai-llm",
-      "tags": ["RAG", "Developer Tools"],
-      "tech_stack": ["Python", "LangChain", "Gemini", "FAISS"],
-      "repository_url": "https://github.com/your-username/ai-knowledge-assistant",
+      "tags": [
+        "Automation",
+        "Email",
+        "Agentic Workflow"
+      ],
+      "tech_stack": [
+        "Python",
+        "LangChain",
+        "LangGraph",
+        "Google Gemini",
+        "Pydantic",
+        "smtplib"
+      ],
+      "repository_url": "https://github.com/codingfreshie/cold_mailing_agent",
       "demo_url": null,
       "image": null,
       "status": "active",
-      "created_at": "2026-08-14",
-      "last_updated": "2026-10-20",
-      "last_analyzed_commit": "e41c9a7d2b0f6c3a58d1e9f4b7a2c6d0e8f13b95",
-      "confidence": 0.93,
-      "needs_review": false,
-      "evidence": [
-        { "claim": "Uses FAISS for vector search", "source": "requirements.txt, src/retriever.py" },
-        { "claim": "Answers include source citations", "source": "src/answer.py" }
-      ],
-      "updates": [
-        {
-          "commit": "e41c9a7d2b0f6c3a58d1e9f4b7a2c6d0e8f13b95",
-          "date": "2026-10-20",
-          "type": "feature",
-          "summary": "Added semantic retrieval so answers draw on the most relevant document chunks instead of keyword matches.",
-          "files": ["src/retriever.py", "src/index.py"]
-        },
-        {
-          "commit": "9b3f0d1a6e8c4527f0a1d3b5c7e9f2a4b6d8c0e1",
-          "date": "2026-09-30",
-          "type": "feature",
-          "summary": "Responses now list the source passages they were based on.",
-          "files": ["src/answer.py"]
-        },
-        {
-          "commit": "5c7a2e90b1d4f6385a9c0e2b4d6f8a1c3e5b7d90",
-          "date": "2026-08-14",
-          "type": "other",
-          "summary": "Initial ingestion pipeline for PDF and Markdown files.",
-          "files": ["src/ingest.py"]
-        }
-      ]
-    },
-    {
-      "id": "surface-defect-detector",
-      "repository_id": 100000002,
-      "name": "Surface Defect Detector",
-      "description": "A convolutional model that flags scratches and dents in photos of machined parts.",
-      "overview": "Trains a small CNN on a labeled image set of metal parts and serves predictions through a command-line tool. Includes an evaluation script that reports precision and recall per defect class.",
-      "features": [
-        "Training script with augmentation",
-        "Per-class precision and recall report",
-        "Batch inference over a folder of images"
-      ],
-      "primary_category": "ml",
-      "tags": ["Computer Vision"],
-      "tech_stack": ["Python", "PyTorch", "OpenCV"],
-      "repository_url": "https://github.com/your-username/surface-defect-detector",
-      "demo_url": null,
-      "image": null,
-      "status": "active",
-      "created_at": "2026-06-02",
-      "last_updated": "2026-09-11",
-      "last_analyzed_commit": "2d8e4a6c0b1f3957e1a3c5d7f9b0e2a4c6d8f013",
-      "confidence": 0.88,
-      "needs_review": false,
-      "evidence": [
-        { "claim": "Implements a CNN in PyTorch", "source": "model/cnn.py" }
-      ],
-      "updates": [
-        {
-          "commit": "2d8e4a6c0b1f3957e1a3c5d7f9b0e2a4c6d8f013",
-          "date": "2026-09-11",
-          "type": "performance",
-          "summary": "Batched inference cut folder scan time by running images through the model together.",
-          "files": ["predict.py"]
-        },
-        {
-          "commit": "7e1b3d5f9a0c2468b0d2f4a6c8e0b1d3f5a7c9e2",
-          "date": "2026-07-19",
-          "type": "fix",
-          "summary": "Fixed an off-by-one in the evaluation script that skewed recall for the smallest class.",
-          "files": ["evaluate.py"]
-        }
-      ]
-    },
-    {
-      "id": "tiny-kv-store",
-      "repository_id": 100000003,
-      "name": "Tiny KV Store",
-      "description": "A log-structured key-value store with compaction, written for a databases course.",
-      "overview": "Appends writes to a log file, keeps an in-memory index of key offsets, and periodically compacts old segments. Built to understand how storage engines trade write speed against read cost.",
-      "features": [
-        "Append-only write log",
-        "In-memory offset index",
-        "Segment compaction",
-        "Crash recovery by replaying the log"
-      ],
-      "primary_category": "cs-fundamentals",
-      "tags": ["Databases", "Coursework"],
-      "tech_stack": ["Rust"],
-      "repository_url": "https://github.com/your-username/tiny-kv-store",
-      "demo_url": null,
-      "image": null,
-      "status": "active",
-      "created_at": "2026-03-09",
-      "last_updated": "2026-04-22",
-      "last_analyzed_commit": "c3a5e7091b2d4f6a8c0e1b3d5f7a9c2e4b6d8f01",
+      "created_at": "2025-07-15",
+      "last_updated": "2025-07-15",
+      "last_analyzed_commit": "c7ccb9dc7d4fa045b0b599fc8b518501197b872d",
       "confidence": 0.9,
-      "needs_review": false,
-      "evidence": [
-        { "claim": "Compacts segments", "source": "src/compaction.rs" }
-      ],
-      "updates": [
-        {
-          "commit": "c3a5e7091b2d4f6a8c0e1b3d5f7a9c2e4b6d8f01",
-          "date": "2026-04-22",
-          "type": "feature",
-          "summary": "Added segment compaction to reclaim space from overwritten and deleted keys.",
-          "files": ["src/compaction.rs"]
-        }
-      ]
-    },
-    {
-      "id": "invoice-api",
-      "repository_id": 100000004,
-      "name": "Invoice API",
-      "description": "A REST API for creating and tracking invoices, with PDF export and role-based access.",
-      "overview": "A FastAPI service backed by PostgreSQL. Supports creating invoices, recording payments, exporting PDFs, and restricting actions by user role.",
-      "features": [
-        "Invoice and payment endpoints",
-        "PDF export",
-        "Role-based access control",
-        "Automated test suite"
-      ],
-      "primary_category": "software-engineering",
-      "tags": ["API", "Backend"],
-      "tech_stack": ["Python", "FastAPI", "PostgreSQL", "Docker"],
-      "repository_url": "https://github.com/your-username/invoice-api",
-      "demo_url": "https://example.com/invoice-api-docs",
-      "image": null,
-      "status": "active",
-      "created_at": "2026-05-12",
-      "last_updated": "2026-10-02",
-      "last_analyzed_commit": "f0b2d4a6c8e1035b7d9f1a3c5e7b9d0f2a4c6e81",
-      "confidence": 0.62,
       "needs_review": true,
       "evidence": [
-        { "claim": "Role-based access control", "source": "app/auth/roles.py" }
-      ],
-      "updates": [
         {
-          "commit": "f0b2d4a6c8e1035b7d9f1a3c5e7b9d0f2a4c6e81",
-          "date": "2026-10-02",
-          "type": "test",
-          "summary": "Added tests covering payment edge cases such as partial and duplicate payments.",
-          "files": ["tests/test_payments.py"]
+          "claim": "Generates structured email content using Google Gemini 1.5 Flash via LangChain.",
+          "source": "generate_content.py"
         },
         {
-          "commit": "1a3c5e7b9d0f2a4c6e8b0d2f4a6c8e0b1d3f5a79",
-          "date": "2026-08-25",
-          "type": "feature",
-          "summary": "Invoices can now be exported as PDF.",
-          "files": ["app/export.py"]
+          "claim": "Implements a state-based workflow using LangGraph to route tasks between email generation and search tools.",
+          "source": "main_agent.py"
+        },
+        {
+          "claim": "Supports automated email dispatch via Gmail SMTP.",
+          "source": "email_sender.py"
+        },
+        {
+          "claim": "Uses Pydantic models to enforce structured JSON output for email subjects and bodies.",
+          "source": "tools.py"
         }
+      ],
+      "updates": [],
+      "development_status": "in_progress",
+      "planned": [
+        "Integration of Tavily search for external context enrichment"
       ]
     },
     {
-      "id": "ai-knowledge-assistant1",
-      "repository_id": 100000005,
-      "name": "AI Knowledge Assistant",
-      "description": "A retrieval-augmented generation system that answers questions using relevant document context.",
-      "overview": "Ingests PDFs and Markdown files, splits them into chunks, embeds them into a FAISS index, and answers questions with a Gemini model using the retrieved passages as context. Answers cite the source chunks they relied on.",
+      "id": "civic-api-2",
+      "repository_id": 1052879130,
+      "name": "Civic Info API",
+      "description": "A FastAPI-based service that retrieves U.S. representative information by ZIP code using an AI-augmented scraping pipeline.",
+      "overview": "Civic Info API provides a RESTful interface to query U.S. congressional representative data. It utilizes a custom scraping tool powered by LangChain and Google Gemini to extract and enrich information from official government sources, storing the results in a local SQLite database for efficient retrieval.",
       "features": [
-        "Document ingestion for PDF and Markdown",
-        "Semantic retrieval over a local FAISS index",
-        "Answers with source citations",
-        "Command-line and small web interface"
+        "Exposes a REST API endpoint to query representatives by ZIP code",
+        "Automates data collection from house.gov using web scraping",
+        "Enriches scraped representative data using Google Gemini and Tavily Search",
+        "Persists representative and ZIP code mapping in a SQLite database"
       ],
-      "primary_category": "ai-llm",
-      "tags": ["RAG", "Developer Tools"],
-      "tech_stack": ["Python", "LangChain", "Gemini", "FAISS"],
-      "repository_url": "https://github.com/your-username/ai-knowledge-assistant1",
+      "primary_category": "software-engineering",
+      "tags": [
+        "Web Scraping",
+        "Civic Tech",
+        "API Development"
+      ],
+      "tech_stack": [
+        "FastAPI",
+        "SQLite",
+        "LangChain",
+        "Google GenAI",
+        "TavilySearch",
+        "BeautifulSoup4",
+        "Python"
+      ],
+      "repository_url": "https://github.com/codingfreshie/civic_api",
       "demo_url": null,
       "image": null,
       "status": "active",
-      "created_at": "2026-08-14",
-      "last_updated": "2026-10-20",
-      "last_analyzed_commit": "e41c9a7d2b0f6c3a58d1e9f4b7a2c6d0e8f13b95",
-      "confidence": 0.93,
-      "needs_review": false,
+      "created_at": "2025-09-08",
+      "last_updated": "2025-09-08",
+      "last_analyzed_commit": "ada0581c2b4949f5cb69173aa98be4fdcc9ed103",
+      "confidence": 0.8,
+      "needs_review": true,
       "evidence": [
-        { "claim": "Uses FAISS for vector search", "source": "requirements.txt, src/retriever.py" },
-        { "claim": "Answers include source citations", "source": "src/answer.py" }
-      ],
-      "updates": [
         {
-          "commit": "e41c9a7d2b0f6c3a58d1e9f4b7a2c6d0e8f13b95",
-          "date": "2026-10-20",
-          "type": "feature",
-          "summary": "Added semantic retrieval so answers draw on the most relevant document chunks instead of keyword matches.",
-          "files": ["src/retriever.py", "src/index.py"]
+          "claim": "Exposes a REST API endpoint to query representatives by ZIP code",
+          "source": "README.md"
         },
         {
-          "commit": "9b3f0d1a6e8c4527f0a1d3b5c7e9f2a4b6d8c0e1",
-          "date": "2026-09-30",
-          "type": "feature",
-          "summary": "Responses now list the source passages they were based on.",
-          "files": ["src/answer.py"]
+          "claim": "Automates data collection from house.gov using web scraping",
+          "source": "README.md"
         },
         {
-          "commit": "5c7a2e90b1d4f6385a9c0e2b4d6f8a1c3e5b7d90",
-          "date": "2026-08-14",
-          "type": "other",
-          "summary": "Initial ingestion pipeline for PDF and Markdown files.",
-          "files": ["src/ingest.py"]
+          "claim": "Enriches scraped representative data using Google Gemini and Tavily Search",
+          "source": "README.md"
+        },
+        {
+          "claim": "Persists representative and ZIP code mapping in a SQLite database",
+          "source": "README.md"
         }
-      ]
+      ],
+      "updates": [],
+      "development_status": "complete"
     },
     {
-      "id": "surface-defect-detector1",
-      "repository_id": 100000006,
-      "name": "Surface Defect Detector",
-      "description": "A convolutional model that flags scratches and dents in photos of machined parts.",
-      "overview": "Trains a small CNN on a labeled image set of metal parts and serves predictions through a command-line tool. Includes an evaluation script that reports precision and recall per defect class.",
+      "id": "cost-of-carry-futures-arbitrage-backtester-2",
+      "repository_id": 1347328390,
+      "name": "Cost-of-Carry Futures Arbitrage Backtester",
+      "description": "A C++ backtesting tool for cash-and-carry arbitrage between the S&P 500 index and E-mini S&P 500 futures using the cost-of-carry pricing model.",
+      "overview": "This project provides a framework to detect and simulate arbitrage opportunities by comparing actual futures prices against theoretical fair values derived from the cost-of-carry formula. It includes functionality for calculating net profitability, risk metrics, and performing out-of-sample testing and multithreaded grid searches for optimal mispricing thresholds.",
       "features": [
-        "Training script with augmentation",
-        "Per-class precision and recall report",
-        "Batch inference over a folder of images"
+        "Calculates theoretical fair value for futures contracts using the cost-of-carry formula.",
+        "Simulates cash-and-carry arbitrage trades with configurable notional amounts and transaction costs.",
+        "Computes risk metrics including Sharpe ratio and maximum drawdown for backtested strategies.",
+        "Supports out-of-sample testing to evaluate strategy robustness and prevent overfitting.",
+        "Implements a multithreaded grid search to efficiently test multiple strategy parameters."
       ],
       "primary_category": "ml",
-      "tags": ["Computer Vision"],
-      "tech_stack": ["Python", "PyTorch", "OpenCV"],
-      "repository_url": "https://github.com/your-username/surface-defect-detector1",
+      "tags": [
+        "Quantitative Finance",
+        "Backtesting",
+        "Arbitrage",
+        "Financial Modeling"
+      ],
+      "tech_stack": [
+        "C++",
+        "CMake"
+      ],
+      "repository_url": "https://github.com/codingfreshie/Cost-of-Carry-Futures-Arbitrage-Backtester",
       "demo_url": null,
       "image": null,
       "status": "active",
-      "created_at": "2026-06-02",
-      "last_updated": "2026-09-11",
-      "last_analyzed_commit": "2d8e4a6c0b1f3957e1a3c5d7f9b0e2a4c6d8f013",
-      "confidence": 0.88,
-      "needs_review": false,
+      "created_at": "2026-08-26",
+      "last_updated": "2026-08-26",
+      "last_analyzed_commit": "b28e2e69954b81cfecf04938f4f2e988aea9a381",
+      "confidence": 0.8,
+      "needs_review": true,
       "evidence": [
-        { "claim": "Implements a CNN in PyTorch", "source": "model/cnn.py" }
-      ],
-      "updates": [
         {
-          "commit": "2d8e4a6c0b1f3957e1a3c5d7f9b0e2a4c6d8f013",
-          "date": "2026-09-11",
-          "type": "performance",
-          "summary": "Batched inference cut folder scan time by running images through the model together.",
-          "files": ["predict.py"]
+          "claim": "Calculates theoretical fair value for futures contracts using the cost-of-carry formula.",
+          "source": "src/main.cpp"
         },
         {
-          "commit": "7e1b3d5f9a0c2468b0d2f4a6c8e0b1d3f5a7c9e2",
-          "date": "2026-07-19",
-          "type": "fix",
-          "summary": "Fixed an off-by-one in the evaluation script that skewed recall for the smallest class.",
-          "files": ["evaluate.py"]
+          "claim": "Simulates cash-and-carry arbitrage trades with configurable notional amounts and transaction costs.",
+          "source": "src/main.cpp"
+        },
+        {
+          "claim": "Computes risk metrics including Sharpe ratio and maximum drawdown for backtested strategies.",
+          "source": "src/main.cpp"
+        },
+        {
+          "claim": "Supports out-of-sample testing to evaluate strategy robustness and prevent overfitting.",
+          "source": "src/main.cpp"
+        },
+        {
+          "claim": "Implements a multithreaded grid search to efficiently test multiple strategy parameters.",
+          "source": "src/main.cpp"
         }
+      ],
+      "updates": [],
+      "development_status": "complete",
+      "planned": [
+        "Use actual historical interest rates instead of fixed assumptions",
+        "Incorporate margin requirements into PnL calculations",
+        "Utilize individual contract-level futures data instead of continuous series",
+        "Add execution slippage modeling"
       ]
     },
     {
-      "id": "tiny-kv-store1",
-      "repository_id": 100000007,
-      "name": "Tiny KV Store",
-      "description": "A log-structured key-value store with compaction, written for a databases course.",
-      "overview": "Appends writes to a log file, keeps an in-memory index of key offsets, and periodically compacts old segments. Built to understand how storage engines trade write speed against read cost.",
+      "id": "coco-project",
+      "repository_id": 1402607511,
+      "name": "Compiler Construction Project",
+      "description": "A C-based compiler implementation featuring a DFA-driven lexical analyzer and a predictive parser for a custom programming language.",
+      "overview": "Developed as part of a Compiler Construction course, this project implements the front-end stages of a compiler. It includes a lexical analyzer that uses a Deterministic Finite Automaton (DFA) to tokenize source code and a predictive parser that generates a parse tree based on a defined grammar, complete with automated FIRST and FOLLOW set computation.",
       "features": [
-        "Append-only write log",
-        "In-memory offset index",
-        "Segment compaction",
-        "Crash recovery by replaying the log"
+        "Lexical analysis using a DFA to identify tokens and handle comments",
+        "Automated computation of FIRST and FOLLOW sets for grammar analysis",
+        "Predictive parsing to generate a parse tree from a token stream",
+        "Command-line driver for executing lexing, parsing, and timing analysis"
       ],
       "primary_category": "cs-fundamentals",
-      "tags": ["Databases", "Coursework"],
-      "tech_stack": ["Rust"],
-      "repository_url": "https://github.com/your-username/tiny-kv-store1",
+      "tags": [
+        "Compilers",
+        "Parsing",
+        "Lexical Analysis",
+        "Formal Languages"
+      ],
+      "tech_stack": [
+        "C",
+        "Makefile"
+      ],
+      "repository_url": "https://github.com/codingfreshie/Coco-project",
       "demo_url": null,
       "image": null,
       "status": "active",
-      "created_at": "2026-03-09",
-      "last_updated": "2026-04-22",
-      "last_analyzed_commit": "c3a5e7091b2d4f6a8c0e1b3d5f7a9c2e4b6d8f01",
+      "created_at": "2026-10-03",
+      "last_updated": "2026-10-11",
+      "last_analyzed_commit": "6d3462e2bb2559143beddb40c781acd10bc1ded6",
+      "confidence": 1.0,
+      "needs_review": true,
+      "evidence": [
+        {
+          "claim": "Lexical analysis using a DFA to identify tokens and handle comments",
+          "source": "lexer.c"
+        },
+        {
+          "claim": "Automated computation of FIRST and FOLLOW sets for grammar analysis",
+          "source": "parser.c"
+        },
+        {
+          "claim": "Predictive parsing to generate a parse tree from a token stream",
+          "source": "parser.c"
+        },
+        {
+          "claim": "Command-line driver for executing lexing, parsing, and timing analysis",
+          "source": "driver.c"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress",
+      "planned": [
+        "Improve syntactic error reporting",
+        "Full support for all test cases"
+      ]
+    },
+    {
+      "id": "final-cold-mail-assistant",
+      "repository_id": 1414007661,
+      "name": "Final Cold Mail Assistant",
+      "description": "A full-stack web application that uses AI to generate and send personalized cold emails based on user-uploaded resumes.",
+      "overview": "This application provides a platform for users to manage their professional outreach. It features a React frontend and a Node.js backend that integrates with Google Gemini AI to draft email content. The system includes PDF resume processing, secure user authentication, and automated email dispatching via Python scripts.",
+      "features": [
+        "User registration and login with JWT-based authentication and bcrypt password hashing.",
+        "AI-powered chat interface utilizing Google Gemini 1.5 Flash.",
+        "PDF resume upload and text extraction functionality.",
+        "Automated cold email generation based on user-provided topics and resume data.",
+        "Email dispatching capabilities using a Python-based sender script."
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Authentication",
+        "Email Automation",
+        "Resume Processing"
+      ],
+      "tech_stack": [
+        "React",
+        "Node.js",
+        "Express.js",
+        "SQLite",
+        "Google Gemini AI",
+        "Python",
+        "JWT",
+        "Vite"
+      ],
+      "repository_url": "https://github.com/codingfreshie/final_cold_mail_assistant",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2026-10-11",
+      "last_updated": "2026-10-11",
+      "last_analyzed_commit": "3ffa28fa54c1b79ac4809b1d86dff0bca07e9d6d",
+      "confidence": 0.9,
+      "needs_review": true,
+      "evidence": [
+        {
+          "claim": "User registration and login with JWT-based authentication and bcrypt password hashing.",
+          "source": "backend/server.js"
+        },
+        {
+          "claim": "AI-powered chat interface utilizing Google Gemini 1.5 Flash.",
+          "source": "backend/server.js"
+        },
+        {
+          "claim": "PDF resume upload and text extraction functionality.",
+          "source": "backend/server.js"
+        },
+        {
+          "claim": "Automated cold email generation based on user-provided topics and resume data.",
+          "source": "backend/server.js"
+        },
+        {
+          "claim": "Email dispatching capabilities using a Python-based sender script.",
+          "source": "backend/email_sender.py"
+        }
+      ],
+      "updates": [],
+      "development_status": "complete",
+      "planned": [
+        "Integration of vector database storage for resume context",
+        "Enhanced error handling for optional dependencies like nodemailer"
+      ]
+    },
+    {
+      "id": "llm-project",
+      "repository_id": 1016891274,
+      "name": "Codebase Evolution Insight Tool",
+      "description": "A tool that analyzes development history to uncover the reasoning behind code changes by building a causal knowledge graph.",
+      "overview": "This project provides a history-aware interface for codebases by connecting Git commit history, pull requests, issues, and developer discussions into a structured knowledge graph. It enables users to query the rationale behind specific implementation decisions or refactors using a natural language interface powered by LLMs.",
+      "features": [
+        "Extracts commit, pull request, and issue data from Git and GitHub",
+        "Constructs a causal knowledge graph to link developers, code, and concepts",
+        "Provides a natural language interface for querying codebase evolution",
+        "Uses Django REST framework for backend API services",
+        "Implements a React-based frontend for user interaction"
+      ],
+      "primary_category": "ai-llm",
+      "tags": [
+        "Knowledge Graph",
+        "Git Analysis",
+        "Developer Tools",
+        "NLP"
+      ],
+      "tech_stack": [
+        "Python",
+        "Django",
+        "React",
+        "LangChain",
+        "OpenAI",
+        "Neo4j",
+        "GitPython",
+        "Tailwind CSS",
+        "Vite"
+      ],
+      "repository_url": "https://github.com/codingfreshie/llm-project",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2025-07-09",
+      "last_updated": "2025-07-09",
+      "last_analyzed_commit": "27892febb0bff5182736293ae90bc3e641d321e2",
+      "confidence": 0.8,
+      "needs_review": true,
+      "evidence": [
+        {
+          "claim": "Extracts commit, pull request, and issue data from Git and GitHub",
+          "source": "README.md"
+        },
+        {
+          "claim": "Constructs a causal knowledge graph to link developers, code, and concepts",
+          "source": "README.md"
+        },
+        {
+          "claim": "Provides a natural language interface for querying codebase evolution",
+          "source": "README.md"
+        },
+        {
+          "claim": "Uses Django REST framework for backend API services",
+          "source": "backend/manage.py"
+        },
+        {
+          "claim": "Implements a React-based frontend for user interaction",
+          "source": "frontend/package.json"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress",
+      "planned": [
+        "Refinement of NLP-based entity and relation extraction",
+        "Integration with Neo4j for graph storage and traversal"
+      ]
+    },
+    {
+      "id": "study-on-vlms",
+      "repository_id": 1016903692,
+      "name": "Study-on-vlms",
+      "description": "A repository containing a research report on vision-language models (VLMs) and basic implementation examples.",
+      "overview": "This project serves as a documentation repository for research conducted on vision-language models, including a report and associated implementation code.",
+      "features": [],
+      "primary_category": "ai-llm",
+      "tags": [
+        "Computer Vision",
+        "Research"
+      ],
+      "tech_stack": [],
+      "repository_url": "https://github.com/codingfreshie/Study-on-vlms",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2025-07-09",
+      "last_updated": "2025-07-09",
+      "last_analyzed_commit": "a796d0ac0f207f049c462f2927d34dd845a7a79a",
+      "confidence": 0.3,
+      "needs_review": true,
+      "evidence": [],
+      "updates": [],
+      "planned": [
+        "Research report on vision-language models",
+        "Basic implementations of VLM concepts"
+      ]
+    },
+    {
+      "id": "ps-1-backend",
+      "repository_id": 1017421275,
+      "name": "PS_1_Backend",
+      "description": "A backend API for user authentication and activity tracking built with ASP.NET Core.",
+      "overview": "This project provides a RESTful API for managing user registration, login, and activity logging. It utilizes Entity Framework Core for database interactions with SQL Server and includes Swagger integration for API documentation and testing.",
+      "features": [
+        "User registration and login functionality",
+        "Activity tracking and management endpoints",
+        "Database schema management using Entity Framework Core migrations",
+        "API documentation and testing interface via Swagger"
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "REST API",
+        "Authentication",
+        "Activity Tracking"
+      ],
+      "tech_stack": [
+        "ASP.NET Core 8",
+        "Entity Framework Core",
+        "SQL Server",
+        "C#"
+      ],
+      "repository_url": "https://github.com/codingfreshie/PS_1_Backend",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2025-07-10",
+      "last_updated": "2025-07-14",
+      "last_analyzed_commit": "8f7695381bbd3ec6673f1a088b2deaf6fe22c105",
+      "confidence": 1.0,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "User registration and login functionality",
+          "source": "Controllers/RegisterController.cs"
+        },
+        {
+          "claim": "Activity tracking and management endpoints",
+          "source": "Controllers/CHOActivityController.cs"
+        },
+        {
+          "claim": "Database schema management using Entity Framework Core migrations",
+          "source": "Migrations/20250710122511_InitialCreate.cs"
+        },
+        {
+          "claim": "API documentation and testing interface via Swagger",
+          "source": "Program.cs"
+        }
+      ],
+      "updates": [],
+      "development_status": "complete"
+    },
+    {
+      "id": "dvm1",
+      "repository_id": 720779004,
+      "name": "dvm1",
+      "description": "A static front-end clone of the Razer e-commerce landing page.",
+      "overview": "This project is a static web page implementation designed to replicate the layout and visual style of the Razer official store. It features a responsive navigation bar, promotional banners, and a structured footer.",
+      "features": [
+        "Responsive navigation bar with a mobile-friendly hamburger menu toggle",
+        "Grid-based layout for promotional product banners and call-to-action sections",
+        "Multi-column footer containing site navigation and social media links"
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Web Design",
+        "UI Clone"
+      ],
+      "tech_stack": [
+        "HTML",
+        "CSS",
+        "Font Awesome"
+      ],
+      "repository_url": "https://github.com/codingfreshie/dvm1",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2023-11-19",
+      "last_updated": "2023-11-19",
+      "last_analyzed_commit": "506993c282a560244177abfb016ad6f25a17c5f0",
       "confidence": 0.9,
       "needs_review": false,
       "evidence": [
-        { "claim": "Compacts segments", "source": "src/compaction.rs" }
-      ],
-      "updates": [
         {
-          "commit": "c3a5e7091b2d4f6a8c0e1b3d5f7a9c2e4b6d8f01",
-          "date": "2026-04-22",
-          "type": "feature",
-          "summary": "Added segment compaction to reclaim space from overwritten and deleted keys.",
-          "files": ["src/compaction.rs"]
+          "claim": "Responsive navigation bar with a mobile-friendly hamburger menu toggle",
+          "source": "index.html"
+        },
+        {
+          "claim": "Grid-based layout for promotional product banners and call-to-action sections",
+          "source": "index.html"
+        },
+        {
+          "claim": "Multi-column footer containing site navigation and social media links",
+          "source": "index.html"
         }
+      ],
+      "updates": [],
+      "development_status": "in_progress"
+    },
+    {
+      "id": "dvm2",
+      "repository_id": 720784278,
+      "name": "dvm2",
+      "description": "A static front-end clone of the Razer e-commerce website homepage.",
+      "overview": "This project is a static HTML and CSS implementation of a product landing page, replicating the layout and navigation structure of the Razer website.",
+      "features": [
+        "Responsive navigation bar with product categories and search functionality",
+        "Multiple promotional product sections with call-to-action buttons",
+        "Footer containing site navigation links and social media icons"
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Front-end",
+        "Web Design"
+      ],
+      "tech_stack": [
+        "HTML",
+        "CSS"
+      ],
+      "repository_url": "https://github.com/codingfreshie/dvm2",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2023-11-19",
+      "last_updated": "2023-11-19",
+      "last_analyzed_commit": "f824b8507538919ca46aac83c3b96f7007dd22d1",
+      "confidence": 0.9,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "Responsive navigation bar with product categories and search functionality",
+          "source": "index.html"
+        },
+        {
+          "claim": "Multiple promotional product sections with call-to-action buttons",
+          "source": "index.html"
+        },
+        {
+          "claim": "Footer containing site navigation links and social media icons",
+          "source": "index.html"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress"
+    },
+    {
+      "id": "dvm-task2",
+      "repository_id": 724725057,
+      "name": "dvm-task2",
+      "description": "A web-based registration form featuring client-side validation and local storage persistence.",
+      "overview": "This project provides a student registration form that captures user details such as name, email, phone number, and institutional ID. It uses JavaScript to validate inputs and store the submitted data in the browser's localStorage.",
+      "features": [
+        "Client-side form validation using HTML5 patterns and JavaScript",
+        "Persistence of form data to the browser's localStorage upon submission",
+        "Reset functionality to clear input fields and radio button selections"
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Web Forms",
+        "Frontend Development"
+      ],
+      "tech_stack": [
+        "HTML",
+        "CSS"
+      ],
+      "repository_url": "https://github.com/codingfreshie/dvm-task2",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2023-11-28",
+      "last_updated": "2023-11-28",
+      "last_analyzed_commit": "d5e1641f25528f6d978f771f78cf6fc1fc5cb4da",
+      "confidence": 0.8,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "Client-side form validation using HTML5 patterns and JavaScript",
+          "source": "index.html"
+        },
+        {
+          "claim": "Persistence of form data to the browser's localStorage upon submission",
+          "source": "index.html"
+        },
+        {
+          "claim": "Reset functionality to clear input fields and radio button selections",
+          "source": "index.html"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress"
+    },
+    {
+      "id": "dvm-task3",
+      "repository_id": 739497387,
+      "name": "The Rail Park Landing Page",
+      "description": "A responsive landing page for The Rail Park, featuring interactive navigation, image carousels, and scroll-based animations.",
+      "overview": "This project is a front-end implementation of a landing page for The Rail Park. It utilizes custom JavaScript to handle interactive UI elements, such as navigation menus, image sliders, and scroll-triggered visual effects, while maintaining a responsive layout.",
+      "features": [
+        "Interactive navigation menus with toggle functionality",
+        "Image carousel with automatic and manual navigation controls",
+        "Scroll-based parallax effects for visual elements",
+        "Responsive design with dynamic icon updates based on viewport width",
+        "Mouse-following video preview element"
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Web Design",
+        "UI/UX",
+        "Responsive Design"
+      ],
+      "tech_stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "repository_url": "https://github.com/codingfreshie/dvm_task3",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2024-01-05",
+      "last_updated": "2024-01-11",
+      "last_analyzed_commit": "ca9d00efda38f6b74b8ee8329e1a918f0975044e",
+      "confidence": 0.9,
+      "needs_review": true,
+      "evidence": [
+        {
+          "claim": "Interactive navigation menus with toggle functionality",
+          "source": "script.js"
+        },
+        {
+          "claim": "Image carousel with automatic and manual navigation controls",
+          "source": "script.js"
+        },
+        {
+          "claim": "Scroll-based parallax effects for visual elements",
+          "source": "script.js"
+        },
+        {
+          "claim": "Responsive design with dynamic icon updates based on viewport width",
+          "source": "script.js"
+        },
+        {
+          "claim": "Mouse-following video preview element",
+          "source": "script.js"
+        }
+      ],
+      "updates": [],
+      "development_status": "complete"
+    },
+    {
+      "id": "my-react-app",
+      "repository_id": 776510931,
+      "name": "Book Keeping App",
+      "description": "A React-based web application that allows users to search for books and browse collections by rating or genre using an external API.",
+      "overview": "This application provides a user interface for discovering books. It fetches data from a third-party book API to display book details, including titles, authors, ratings, and plot summaries, organized by categories such as top-rated or fantasy titles.",
+      "features": [
+        "Search functionality to find books by title via external API integration",
+        "Browse books by rating or genre using toggleable UI components",
+        "Display of book details including plot, genres, and author information in a modal-like view",
+        "Interactive book cards with hover and detail-view capabilities"
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Web Application",
+        "API Integration"
+      ],
+      "tech_stack": [
+        "React",
+        "JavaScript",
+        "CSS",
+        "HTML",
+        "FontAwesome",
+        "react-icons"
+      ],
+      "repository_url": "https://github.com/codingfreshie/my_react_app",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2024-03-23",
+      "last_updated": "2024-03-23",
+      "last_analyzed_commit": "e49ac6f11407adc7ed5a8b49a69b25c0ad10483e",
+      "confidence": 0.8,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "Search functionality to find books by title via external API integration",
+          "source": "src/top_part.jsx"
+        },
+        {
+          "claim": "Browse books by rating or genre using toggleable UI components",
+          "source": "src/Byrate.jsx"
+        },
+        {
+          "claim": "Display of book details including plot, genres, and author information in a modal-like view",
+          "source": "src/BookDetails.jsx"
+        },
+        {
+          "claim": "Interactive book cards with hover and detail-view capabilities",
+          "source": "src/card.jsx"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress"
+    },
+    {
+      "id": "dvm-round2",
+      "repository_id": 786195579,
+      "name": "dvm_round2",
+      "description": "A front-end web project featuring interactive scroll-based animations and automated image carousels.",
+      "overview": "This project implements a dynamic user interface with complex scroll-triggered transformations and timed content transitions. It utilizes native JavaScript to manipulate DOM elements, manage CSS class toggles, and handle layout animations based on user interaction.",
+      "features": [
+        "Scroll-triggered navigation bar visibility and element transformations using window scroll event listeners.",
+        "Automated image carousel functionality with timed intervals for content rotation.",
+        "Interactive drop-down navigation menu triggered by button click events."
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Front-end",
+        "UI/UX",
+        "Animations"
+      ],
+      "tech_stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "repository_url": "https://github.com/codingfreshie/dvm_round2",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2024-04-13",
+      "last_updated": "2024-04-13",
+      "last_analyzed_commit": "ba366de348428706dcd47d9e8a5d5eb86096307e",
+      "confidence": 0.8,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "Scroll-triggered navigation bar visibility and element transformations using window scroll event listeners.",
+          "source": "index.js"
+        },
+        {
+          "claim": "Automated image carousel functionality with timed intervals for content rotation.",
+          "source": "index.js"
+        },
+        {
+          "claim": "Interactive drop-down navigation menu triggered by button click events.",
+          "source": "index.js"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress"
+    },
+    {
+      "id": "todo-list",
+      "repository_id": 817645239,
+      "name": "todo_list",
+      "description": "A simple web-based task and note management application.",
+      "overview": "This project provides a browser-based interface for users to create, manage, and mark tasks as complete, alongside a section for creating notes. It uses vanilla JavaScript for DOM manipulation to handle dynamic task creation and UI interactions.",
+      "features": [
+        "Allows users to add new tasks via an input field",
+        "Supports marking tasks as complete with a strikethrough effect",
+        "Provides a toggleable menu for task management options",
+        "Includes a dedicated section for creating notes with titles and descriptions"
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Task Management",
+        "Frontend"
+      ],
+      "tech_stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "repository_url": "https://github.com/codingfreshie/todo_list",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2024-06-20",
+      "last_updated": "2024-06-20",
+      "last_analyzed_commit": "8217b297331ff3e7952f76324d6e13b25804ef40",
+      "confidence": 0.9,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "Allows users to add new tasks via an input field",
+          "source": "script.js"
+        },
+        {
+          "claim": "Supports marking tasks as complete with a strikethrough effect",
+          "source": "script.js"
+        },
+        {
+          "claim": "Provides a toggleable menu for task management options",
+          "source": "script.js"
+        },
+        {
+          "claim": "Includes a dedicated section for creating notes with titles and descriptions",
+          "source": "index.html"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress",
+      "planned": [
+        "Implement delete functionality for tasks",
+        "Implement select functionality for tasks"
       ]
+    },
+    {
+      "id": "web-clone",
+      "repository_id": 823155812,
+      "name": "Codrops Web Clone",
+      "description": "A static HTML and CSS recreation of the Codrops website layout, featuring a grid-based article display and navigation structure.",
+      "overview": "This project is a front-end layout clone of the Codrops website. It demonstrates the use of HTML and CSS to replicate a complex, multi-column grid interface, including navigation bars, article listings, and sidebar components.",
+      "features": [
+        "Responsive navigation bar with search functionality",
+        "Grid-based layout for displaying article cards with images and metadata",
+        "Sidebar containing promotional content and newsletter subscription forms"
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Web Design",
+        "UI Layout",
+        "Frontend"
+      ],
+      "tech_stack": [
+        "HTML",
+        "CSS"
+      ],
+      "repository_url": "https://github.com/codingfreshie/web_clone",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2024-07-02",
+      "last_updated": "2024-07-02",
+      "last_analyzed_commit": "00818600398b95f34644fba05933b55d00322521",
+      "confidence": 0.9,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "Responsive navigation bar with search functionality",
+          "source": "index.html"
+        },
+        {
+          "claim": "Grid-based layout for displaying article cards with images and metadata",
+          "source": "index.html"
+        },
+        {
+          "claim": "Sidebar containing promotional content and newsletter subscription forms",
+          "source": "index.html"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress"
+    },
+    {
+      "id": "music-app",
+      "repository_id": 825833430,
+      "name": "music_app",
+      "description": "A simple web-based music player interface that allows users to play, pause, and navigate through a predefined list of audio tracks.",
+      "overview": "This project is a browser-based music player built with HTML, CSS, and JavaScript. It provides a graphical interface for controlling audio playback, including a progress bar and track navigation controls.",
+      "features": [
+        "Play and pause functionality for audio tracks",
+        "Track navigation using next and previous buttons",
+        "Interactive progress bar to track and seek playback position",
+        "Dynamic display of the current song title"
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Web Application",
+        "Audio Player"
+      ],
+      "tech_stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "repository_url": "https://github.com/codingfreshie/music_app",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2024-07-08",
+      "last_updated": "2024-07-08",
+      "last_analyzed_commit": "659fa9285ab2759c8a4358667340f4872daccc2f",
+      "confidence": 0.8,
+      "needs_review": true,
+      "evidence": [
+        {
+          "claim": "Play and pause functionality for audio tracks",
+          "source": "script.js"
+        },
+        {
+          "claim": "Track navigation using next and previous buttons",
+          "source": "script.js"
+        },
+        {
+          "claim": "Interactive progress bar to track and seek playback position",
+          "source": "script.js"
+        },
+        {
+          "claim": "Dynamic display of the current song title",
+          "source": "script.js"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress"
+    },
+    {
+      "id": "razer-clone",
+      "repository_id": 862496771,
+      "name": "Razer Website Clone",
+      "description": "A static front-end clone of the Razer e-commerce homepage, featuring a navigation bar, promotional product sections, and a footer.",
+      "overview": "This project is a static HTML and CSS implementation replicating the visual layout and structure of the Razer official website. It demonstrates basic web layout techniques using semantic HTML and CSS styling.",
+      "features": [
+        "Navigation bar with dropdown placeholders",
+        "Promotional product sections with call-to-action links",
+        "Multi-column footer layout with site navigation links"
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Front-end",
+        "Web Design"
+      ],
+      "tech_stack": [
+        "HTML",
+        "CSS",
+        "Font Awesome"
+      ],
+      "repository_url": "https://github.com/codingfreshie/razer_clone",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2024-09-24",
+      "last_updated": "2024-09-24",
+      "last_analyzed_commit": "ed579875b2c5f3358e683a9b7880c9d9344c9e25",
+      "confidence": 0.9,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "Navigation bar with dropdown placeholders",
+          "source": "index.html"
+        },
+        {
+          "claim": "Promotional product sections with call-to-action links",
+          "source": "index.html"
+        },
+        {
+          "claim": "Multi-column footer layout with site navigation links",
+          "source": "index.html"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress"
+    },
+    {
+      "id": "m24-oop-examples",
+      "repository_id": 864478577,
+      "name": "m24-oop-examples",
+      "description": "A collection of Java code examples demonstrating core object-oriented programming concepts, generics, collections, and language features.",
+      "overview": "This repository serves as a reference for fundamental Java programming concepts. It includes structured examples covering inheritance, polymorphism, nested classes, generics, lambda expressions, reflection, and the Java Collections Framework.",
+      "features": [
+        "Demonstrates Java Collections Framework usage including List, Set, Map, and Queue interfaces",
+        "Provides examples of inheritance, method overriding, and dynamic method dispatch",
+        "Illustrates the use of Java Generics in classes, interfaces, and methods",
+        "Shows implementation of lambda expressions and method references",
+        "Demonstrates runtime inspection of classes, constructors, fields, and methods via reflection",
+        "Covers nested and inner class implementations, including static nested classes",
+        "Provides examples of automatic type conversion and type promotion in expressions"
+      ],
+      "primary_category": "cs-fundamentals",
+      "tags": [
+        "Java",
+        "Object-Oriented Programming",
+        "Educational"
+      ],
+      "tech_stack": [
+        "Java"
+      ],
+      "repository_url": "https://github.com/codingfreshie/m24-oop-examples",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2024-09-28",
+      "last_updated": "2024-09-28",
+      "last_analyzed_commit": "4c7bea576154ac9044110a8775efb64ad9264162",
+      "confidence": 1.0,
+      "needs_review": true,
+      "evidence": [
+        {
+          "claim": "Demonstrates Java Collections Framework usage including List, Set, Map, and Queue interfaces",
+          "source": "collections/CollectionInterfaceDemo.java"
+        },
+        {
+          "claim": "Provides examples of inheritance, method overriding, and dynamic method dispatch",
+          "source": "inheritance/InheritanceExample.java"
+        },
+        {
+          "claim": "Illustrates the use of Java Generics in classes, interfaces, and methods",
+          "source": "generics/GenericDemo.java"
+        },
+        {
+          "claim": "Shows implementation of lambda expressions and method references",
+          "source": "lambda_expressions/LambdaDemo.java"
+        },
+        {
+          "claim": "Demonstrates runtime inspection of classes, constructors, fields, and methods via reflection",
+          "source": "reflections/ReflectionExample.java"
+        },
+        {
+          "claim": "Covers nested and inner class implementations, including static nested classes",
+          "source": "nested_and_inner_classes/StaticClassExample.java"
+        },
+        {
+          "claim": "Provides examples of automatic type conversion and type promotion in expressions",
+          "source": "type_conversion/AutoConversionDemo.java"
+        }
+      ],
+      "updates": [],
+      "development_status": "complete"
+    },
+    {
+      "id": "wine-quality",
+      "repository_id": 883027159,
+      "name": "Wine-quality",
+      "description": "An exploratory data analysis and machine learning project that evaluates wine quality using various classification models.",
+      "overview": "This project performs data analysis and predictive modeling on the Wine Quality dataset. It includes data preprocessing, exploratory visualization, and the implementation of several machine learning algorithms to classify wine quality.",
+      "features": [
+        "Exploratory data analysis including summary statistics, histograms, and correlation heatmaps",
+        "Feature engineering to categorize wine quality into binary labels",
+        "Implementation of Logistic Regression, Decision Tree, Random Forest, and Gradient Boosting classifiers",
+        "Model hyperparameter tuning using GridSearchCV",
+        "Model performance evaluation using accuracy scores and confusion matrices",
+        "Cross-validation for model robustness assessment"
+      ],
+      "primary_category": "ml",
+      "tags": [
+        "Data Analysis",
+        "Classification",
+        "Predictive Modeling"
+      ],
+      "tech_stack": [
+        "Jupyter Notebook",
+        "pandas",
+        "matplotlib",
+        "seaborn"
+      ],
+      "repository_url": "https://github.com/codingfreshie/Wine-quality",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2024-11-04",
+      "last_updated": "2024-11-04",
+      "last_analyzed_commit": "13c69d604b3bf3cbfb16594f3d23f58b9773dc76",
+      "confidence": 0.9,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "Exploratory data analysis including summary statistics, histograms, and correlation heatmaps",
+          "source": "Wine_quality.ipynb"
+        },
+        {
+          "claim": "Feature engineering to categorize wine quality into binary labels",
+          "source": "Wine_quality.ipynb"
+        },
+        {
+          "claim": "Implementation of Logistic Regression, Decision Tree, Random Forest, and Gradient Boosting classifiers",
+          "source": "Wine_quality.ipynb"
+        },
+        {
+          "claim": "Model hyperparameter tuning using GridSearchCV",
+          "source": "Wine_quality.ipynb"
+        },
+        {
+          "claim": "Model performance evaluation using accuracy scores and confusion matrices",
+          "source": "Wine_quality.ipynb"
+        },
+        {
+          "claim": "Cross-validation for model robustness assessment",
+          "source": "Wine_quality.ipynb"
+        }
+      ],
+      "updates": [],
+      "development_status": "complete"
+    },
+    {
+      "id": "resume",
+      "repository_id": 919601253,
+      "name": "codingfreshie/resume",
+      "description": "A repository containing resume documentation.",
+      "overview": "This repository serves as a storage location for resume-related files. It contains no source code, build scripts, or configuration files.",
+      "features": [],
+      "primary_category": "other",
+      "tags": [
+        "documentation"
+      ],
+      "tech_stack": [],
+      "repository_url": "https://github.com/codingfreshie/resume",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2025-01-20",
+      "last_updated": "2025-01-20",
+      "last_analyzed_commit": "ad23647c98bf68c2eeed575b01b6d7d0a750950b",
+      "confidence": 0.3,
+      "needs_review": true,
+      "evidence": [],
+      "updates": []
+    },
+    {
+      "id": "team-bits1",
+      "repository_id": 928458260,
+      "name": "team_bits1",
+      "description": "A boilerplate project template configured with React and Vite.",
+      "overview": "This repository serves as a starter template for building web applications using React and Vite. It includes basic configuration for development, linting, and deployment to GitHub Pages.",
+      "features": [
+        "Provides a development environment with Vite and React 19.",
+        "Includes scripts for building, linting, and deploying the application to GitHub Pages."
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Web Development",
+        "Frontend"
+      ],
+      "tech_stack": [
+        "React",
+        "Vite",
+        "JavaScript",
+        "ESLint",
+        "gh-pages"
+      ],
+      "repository_url": "https://github.com/codingfreshie/team_bits1",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2025-02-06",
+      "last_updated": "2025-02-06",
+      "last_analyzed_commit": "d741e27d430ea5065e91e6573e33cdc5ffa8ecba",
+      "confidence": 0.8,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "Provides a development environment with Vite and React 19.",
+          "source": "package.json"
+        },
+        {
+          "claim": "Includes scripts for building, linting, and deploying the application to GitHub Pages.",
+          "source": "package.json"
+        }
+      ],
+      "updates": [],
+      "development_status": "in_progress"
+    },
+    {
+      "id": "upcoming-matchs",
+      "repository_id": 993090393,
+      "name": "Upcoming Matchs",
+      "description": "A full-stack application that fetches and displays upcoming basketball match fixtures using an external API.",
+      "overview": "Upcoming Matchs is a web application designed to provide sports enthusiasts with a list of scheduled basketball games. It features a React frontend for the user interface and an Express backend that handles API requests to the RapidAPI basketball service, including a caching mechanism to optimize data retrieval.",
+      "features": [
+        "Fetches and displays upcoming basketball match details including teams, date, time, and venue.",
+        "Implements a server-side caching mechanism to store match data for 10 minutes, reducing external API calls.",
+        "Filters out finished or canceled matches from the retrieved data.",
+        "Provides a responsive frontend built with React and Tailwind CSS."
+      ],
+      "primary_category": "software-engineering",
+      "tags": [
+        "Sports",
+        "API Integration"
+      ],
+      "tech_stack": [
+        "React",
+        "Express",
+        "Node.js",
+        "Tailwind CSS",
+        "Vite",
+        "Axios",
+        "JavaScript"
+      ],
+      "repository_url": "https://github.com/codingfreshie/upcoming_matchs",
+      "demo_url": null,
+      "image": null,
+      "status": "active",
+      "created_at": "2025-05-30",
+      "last_updated": "2025-05-30",
+      "last_analyzed_commit": "92d9438a0054eb384d44e8e1dd8fd58069b5e712",
+      "confidence": 0.9,
+      "needs_review": false,
+      "evidence": [
+        {
+          "claim": "Fetches and displays upcoming basketball match details including teams, date, time, and venue.",
+          "source": "README.md"
+        },
+        {
+          "claim": "Implements a server-side caching mechanism to store match data for 10 minutes, reducing external API calls.",
+          "source": "backend/server.js"
+        },
+        {
+          "claim": "Filters out finished or canceled matches from the retrieved data.",
+          "source": "backend/server.js"
+        },
+        {
+          "claim": "Provides a responsive frontend built with React and Tailwind CSS.",
+          "source": "frontend/package.json"
+        }
+      ],
+      "updates": [],
+      "development_status": "complete"
     }
   ]
 }

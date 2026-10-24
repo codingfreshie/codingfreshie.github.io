@@ -5,9 +5,9 @@ on:
     - cron: "0 6 * * *"   # daily at 06:00 UTC
   workflow_dispatch:       # manual "Run workflow" button
 
+# Day 2 only reads GitHub. Write permissions are added on Day 5 when the agent opens pull requests.
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: portfolio-agent
@@ -15,12 +15,27 @@ concurrency:
 
 jobs:
   run-agent:
-    # Scheduled runs only happen when the switch is on.
-    # Manual runs always work, so you can test while it's off.
+    # Scheduled runs only happen when the switch is on. Manual runs always work.
     if: github.event_name == 'workflow_dispatch' || vars.AUTOMATION_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Placeholder
-        run: echo "Agent would run here. AUTOMATION_ENABLED=${{ vars.AUTOMATION_ENABLED }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: agent/requirements.txt
+      - run: pip install -r agent/requirements.txt
+      - name: Run tests
+        run: python -m pytest agent/tests -q
+      - name: Discover and collect
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -m agent.collect run
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-out
+          path: agent/out
+          retention-days: 7

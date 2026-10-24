@@ -1,0 +1,179 @@
+========================================================================
+codingfreshie/cold_mailing_agent
+  description : (none)
+  language    : Python   languages: Python
+  head commit : c7ccb9d (2025-07-15)
+  review flags: no_readme
+  evidence mode: code_first  (code read as well)
+
+  tree: 9 files, 9 usable. Skipped: nothing
+  tests=False ci=False docker=False docs_dir=False
+  top-level dirs: (none)
+
+  files read (these are what the AI would see):
+    generate_content.py  (2801 bytes)
+    tools.py  (2307 bytes)
+    main_agent.py  (1958 bytes)
+    email_sender.py  (937 bytes)
+    use_llm.py  (742 bytes)
+    listofmodels.py  (572 bytes)
+
+  first listed paths:
+    .gitignore
+    call.py
+    email_sender.py
+    generate_content.py
+    listofmodels.py
+    main_agent.py
+    read_pdf.py
+    tools.py
+    use_llm.py
+
+========================================================================
+codingfreshie/civic_api
+  description : (none)
+  language    : Python   languages: Python
+  head commit : ada0581 (2025-09-08)
+  review flags: none
+  README check: clear=True prose=1685 chars, boilerplate=False, unfinished hints=none
+  evidence mode: readme_first  (README trusted; code read lightly)
+
+  tree: 7 files, 7 usable. Skipped: nothing
+  tests=False ci=False docker=False docs_dir=False
+  top-level dirs: civic_api
+
+  files read (these are what the AI would see):
+    README.md  (2926 bytes)
+    requirements.txt  (124 bytes)
+
+  declared dependencies:
+    requirements.txt: fastapi, uvicorn, langchain, requests, beautifulsoup4, python-dotenv, google-generativeai, langchain_tavily, langchain-google-genai
+
+  first listed paths:
+    .gitignore
+    README.md
+    requirements.txt
+    civic_api/fin_api.py
+    civic_api/initiate_db.py
+    civic_api/scraper.py
+    civic_api/scraper3.py
+
+========================================================================
+codingfreshie/Cost-of-Carry-Futures-Arbitrage-Backtester
+  description : (none)
+  language    : C++   languages: C++, CMake
+  head commit : b28e2e6 (2026-08-26)
+  review flags: none
+  README check: clear=True prose=3901 chars, boilerplate=False, unfinished hints=none
+  evidence mode: readme_first  (README trusted; code read lightly)
+
+  tree: 8 files, 3 usable. Skipped: {'binary': 1, 'data': 3, 'vendored': 1}
+  tests=False ci=False docker=False docs_dir=False
+  top-level dirs: src
+
+  files read (these are what the AI would see):
+    README.md  (4366 bytes)
+    CMakeLists.txt  (164 bytes)
+    src/main.cpp  (16747 bytes)
+
+  first listed paths:
+    CMakeLists.txt
+    README.md
+    src/main.cpp
+
+========================================================================
+codingfreshie/Coco-project
+  description : (none)
+  language    : C   languages: C, Makefile
+  head commit : 6d3462e (2026-10-11)
+  review flags: readme_unclear
+  README check: clear=False prose=254 chars, boilerplate=False, unfinished hints=none
+  evidence mode: code_first  (code read as well)
+
+  tree: 23 files, 23 usable. Skipped: nothing
+  tests=False ci=False docker=False docs_dir=False
+  top-level dirs: (none)
+
+  files read (these are what the AI would see):
+    README.md  (272 bytes)
+    makefile  (675 bytes)
+    grammar.txt  (3370 bytes)
+    parser.c  (16992 bytes)
+    lexer.c  (10501 bytes)
+    driver.c  (3578 bytes)
+    parser.h  (3086 bytes)
+    utils.c  (1922 bytes)
+    lexer.h  (1698 bytes)
+
+  first listed paths:
+    LICENSE
+    README.md
+    custom_t1.txt
+    custom_t2.txt
+    custom_t3.txt
+    custom_t4.txt
+    custom_t5.txt
+    custom_t6.txt
+    driver.c
+    grammar.txt
+    lexer.c
+    lexer.h
+    makefile
+    parser.c
+    parser.h
+    t1.txt
+    t2.txt
+    t3.txt
+    t4.txt
+    t5.txt
+    t6.txt
+    utils.c
+    utils.h
+
+========================================================================
+codingfreshie/final_cold_mail_assistant
+  description : (none)
+  language    : JavaScript   languages: JavaScript, Python, CSS, HTML
+  head commit : 3ffa28f (2026-10-11)
+  review flags: none
+  README check: clear=True prose=3134 chars, boilerplate=False, unfinished hints=none
+  evidence mode: readme_first  (README trusted; code read lightly)
+
+  tree: 25 files, 20 usable. Skipped: {'binary': 2, 'lockfile': 3}
+  tests=False ci=False docker=False docs_dir=False
+  top-level dirs: backend, frontend
+
+  files read (these are what the AI would see):
+    README.md  (5612 bytes)
+    package.json  (728 bytes)
+    backend/server.js  (16146 bytes)
+    backend/package.json  (752 bytes)
+    frontend/package.json  (604 bytes)
+
+  declared dependencies:
+    package.json: concurrently
+    backend/package.json: express, cors, bcryptjs, jsonwebtoken, sqlite3, dotenv, @google/generative-ai, express-session, multer, nodemailer, nodemon
+    frontend/package.json: react, react-dom, @eslint/js, @types/react, @types/react-dom, @vitejs/plugin-react, eslint, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals, vite
+
+  first listed paths:
+    README.md
+    package.json
+    backend/email_sender.py
+    backend/env_example.txt
+    backend/extract_pdf.py
+    backend/generate_email.py
+    backend/package.json
+    backend/server.js
+    frontend/.gitignore
+    frontend/README.md
+    frontend/eslint.config.js
+    frontend/index.html
+    frontend/package.json
+    frontend/vite.config.js
+    frontend/src/App.css
+    frontend/src/App.jsx
+    frontend/src/index.css
+    frontend/src/main.jsx
+    frontend/src/components/Auth.jsx
+    frontend/src/components/Chat.jsx
+

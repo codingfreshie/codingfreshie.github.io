@@ -1,0 +1,20 @@
+{
+  "github_username": "codingfreshie",
+  "include_forks": true,
+  "include_archived_new": false,
+  "readme_first": true,
+  "gemini_model": "gemini-3.1-flash-lite",
+  "min_seconds_between_calls": 7,
+  "min_confidence": 0.6,
+  "exclude_repos": ["codingfreshie.github.io"],
+  "max_new_repos_per_run": 20,
+  "limits": {
+    "max_tree_entries": 8000,
+    "max_listed_paths": 400,
+    "max_files_read": 14,
+    "max_file_bytes": 120000,
+    "max_chars_per_file": 24000,
+    "max_readme_chars": 16000,
+    "max_total_chars": 80000
+  }
+}
