@@ -3,6 +3,7 @@
   python -m agent.collect discover        report new/renamed/archived/missing repositories
   python -m agent.collect repo OWNER/NAME collect one repository (for testing)
   python -m agent.collect run             discover, then collect each new repository
+  python -m agent.collect status          where every public repository stands, and why
   python -m agent.collect inspect [FILE]  human-readable view of collected bundles (no file contents)
 """
 from __future__ import annotations
@@ -69,6 +70,7 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("discover")
     sub.add_parser("run")
+    sub.add_parser("status")
     look = sub.add_parser("inspect")
     look.add_argument("file", nargs="?", type=Path, help="a bundle JSON file; default: every bundle in the output folder")
     one = sub.add_parser("repo")
@@ -96,6 +98,13 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(result, indent=2))
             return 0 if result["status"] != "error" else 1
 
+        if args.command == "status":
+            from .discovery import list_user_repos, load_projects
+            from .status import build_status, render_status
+            rows = build_status(list_user_repos(client, settings.github_username), load_projects(PROJECTS_PATH), args.out, settings)
+            print(render_status(rows))
+            return 0
+
         discovery = discover(client, settings, PROJECTS_PATH)
         _write_json(args.out / "discovery.json", discovery)
 
@@ -103,6 +112,14 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "run":
             for repo in discovery["to_collect"]:
                 results.append(_collect_one(client, settings, repo["full_name"], args.out))
+        if results:   # remember outcomes so `status` can explain them later
+            log_path = args.out / "collect_log.json"
+            try:
+                log_data = json.loads(log_path.read_text("utf-8"))
+            except (OSError, ValueError):
+                log_data = {}
+            log_data.update({r["full_name"]: {"status": r["status"], "detail": r.get("detail", "")} for r in results})
+            _write_json(log_path, log_data)
         summary = render_summary(discovery, results)
         (args.out / "summary.md").write_text(summary, "utf-8")
         _write_step_summary(summary)

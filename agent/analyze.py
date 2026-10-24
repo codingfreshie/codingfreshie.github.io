@@ -13,6 +13,7 @@ import logging
 import sys
 from pathlib import Path
 
+from . import store
 from .analysis import validate_analysis
 from .apply import apply_drafts
 from .draft import build_project
@@ -151,6 +152,7 @@ def main(argv: list[str] | None = None) -> int:
             print("\n".join(render_draft(d) for d in drafts))
             return 0
         if args.command == "apply":
+            store.backup(PROJECTS_PATH, args.out)
             result = apply_drafts(args.out / "drafts", PROJECTS_PATH, is_excluded=load_settings().is_excluded)
             if not result["ok"]:
                 print("Validation failed, so projects.json was left unchanged:\n" + result["output"])

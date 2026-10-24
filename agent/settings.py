@@ -24,6 +24,9 @@ class Limits:
     max_chars_per_file: int = 24_000
     max_readme_chars: int = 16_000
     max_total_chars: int = 80_000
+    max_diff_chars_per_file: int = 4_000
+    max_diff_chars_total: int = 40_000
+    max_commit_messages: int = 30
 
 
 @dataclass(frozen=True)
@@ -36,6 +39,7 @@ class Settings:
     min_seconds_between_calls: float = 7.0
     min_confidence: float = 0.6
     ambiguity_max_confidence: float = 0.85
+    include_docs_updates: bool = False
     exclude_repos: frozenset = frozenset()
     max_new_repos_per_run: int = 5
     limits: Limits = Limits()
@@ -69,6 +73,7 @@ def load_settings(path: Path | str | None = None) -> Settings:
         min_seconds_between_calls=float(raw.get("min_seconds_between_calls", 7.0)),
         min_confidence=float(raw.get("min_confidence", 0.6)),
         ambiguity_max_confidence=float(raw.get("ambiguity_max_confidence", 0.85)),
+        include_docs_updates=bool(raw.get("include_docs_updates", False)),
         exclude_repos=frozenset(excludes),
         max_new_repos_per_run=int(raw.get("max_new_repos_per_run", 5)),
         limits=limits,

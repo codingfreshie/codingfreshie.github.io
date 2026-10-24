@@ -36,6 +36,7 @@
         "image": { "type": ["string", "null"], "pattern": "^images/[A-Za-z0-9_.-]+\\.(png|jpg|jpeg|webp|svg)$" },
         "status": { "enum": ["active", "archived"] },
         "development_status": { "enum": ["complete", "in_progress"] },
+        "locked": { "type": "array", "uniqueItems": true, "items": { "enum": ["name", "description", "overview", "features", "planned", "development_status", "primary_category", "tags", "tech_stack"] } },
         "planned": { "type": "array", "maxItems": 8, "items": { "type": "string", "maxLength": 200 } },
         "created_at": { "$ref": "#/definitions/date" },
         "last_updated": { "$ref": "#/definitions/date" },

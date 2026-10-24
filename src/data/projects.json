@@ -209,8 +209,8 @@
       "image": null,
       "status": "active",
       "created_at": "2026-10-03",
-      "last_updated": "2026-10-11",
-      "last_analyzed_commit": "6d3462e2bb2559143beddb40c781acd10bc1ded6",
+      "last_updated": "2026-10-24",
+      "last_analyzed_commit": "87778d319f24b1746816a38b0ba3c30baeeaa9d4",
       "confidence": 1.0,
       "needs_review": true,
       "evidence": [
@@ -625,8 +625,8 @@
       "image": null,
       "status": "active",
       "created_at": "2024-01-05",
-      "last_updated": "2024-01-11",
-      "last_analyzed_commit": "ca9d00efda38f6b74b8ee8329e1a918f0975044e",
+      "last_updated": "2026-10-24",
+      "last_analyzed_commit": "ba6eb57bfa7dd59527938ec234a0df3a99f3ab47",
       "confidence": 0.9,
       "needs_review": true,
       "evidence": [
@@ -651,7 +651,17 @@
           "source": "script.js"
         }
       ],
-      "updates": [],
+      "updates": [
+        {
+          "commit": "ba6eb57bfa7dd59527938ec234a0df3a99f3ab47",
+          "date": "2026-10-24",
+          "type": "feature",
+          "summary": "Added a print function to the landing page to allow users to print the current view.",
+          "files": [
+            "script.js"
+          ]
+        }
+      ],
       "development_status": "complete"
     },
     {

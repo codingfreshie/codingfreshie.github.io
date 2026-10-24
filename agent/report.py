@@ -21,6 +21,8 @@ def render_summary(discovery: dict, results: list[dict]) -> str:
         f"| Skipped | {len(d['skipped'])} |",
         "",
     ]
+    if d["renamed"] or d["missing"]:
+        lines += ["Some repositories were renamed or are no longer visible. Review them with `python -m agent.sync run`.", ""]
     if results:
         lines += ["### Collection results", "", "| Repository | Result | Files read | Review flags |", "| --- | --- | --- | --- |"]
         for r in results:

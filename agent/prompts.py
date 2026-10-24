@@ -14,7 +14,7 @@ Rules:
 6. Write plain, neutral, third-person prose with no hype. Technology names must appear in the supplied data (dependencies, imports, README) and use their conventional capitalization (LangChain, FastAPI, PostgreSQL). Tags are topics or domains such as "RAG", "Web Scraping" or "Quantitative Finance"; do not repeat technologies from tech_stack as tags.
 7. If the repository is a fork, describe what the owner changed when that is known, not the upstream project."""
 
-_TAGS = r"</?(?:file|repository_data|metadata|readme_check|declared_dependencies|file_tree|fork_info)\b"
+_TAGS = r"</?(?:file|repository_data|metadata|readme_check|declared_dependencies|file_tree|fork_info|change_data|project_context|commits|changed_files|diff)\b"
 
 
 def neutralize(text: str) -> str:

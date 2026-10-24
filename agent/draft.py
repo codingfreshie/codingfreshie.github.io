@@ -20,7 +20,8 @@ def unique_id(base: str, taken: set[str]) -> str:
     return f"{base[:75]}-{n}"
 
 
-def build_project(bundle: dict, cleaned: dict, dropped: dict, taken_ids: set[str], min_confidence: float, model: str) -> dict:
+def build_project(bundle: dict, cleaned: dict, dropped: dict, taken_ids: set[str], min_confidence: float, model: str,
+                  ambiguity_max_confidence: float = 0.85) -> dict:
     r = bundle["repo"]
     created = (r["created_at"] or "")[:10]
     last = ((bundle["head_commit"]["date"] or r["pushed_at"] or r["created_at"] or "")[:10])
@@ -31,7 +32,8 @@ def build_project(bundle: dict, cleaned: dict, dropped: dict, taken_ids: set[str
         reasons.append("low_category_confidence")
     if cleaned["overall_confidence"] < min_confidence:
         reasons.append("low_overall_confidence")
-    if cleaned["alternative_category"] != "none":
+    # A runner-up alone is normal. Only flag it when the model is not confident in its own pick.
+    if cleaned["alternative_category"] != "none" and cleaned["category_confidence"] < ambiguity_max_confidence:
         reasons.append("ambiguous_category")
     reasons += [x for x in bundle["review_reasons"] if x in BUNDLE_REVIEW_REASONS]
     lost = len(dropped["features"])
