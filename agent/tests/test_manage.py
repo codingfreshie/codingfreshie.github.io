@@ -3,6 +3,8 @@ import json
 import pytest
 
 from agent import manage
+from agent.github_client import GitHubError
+from .conftest import FakeClient
 
 
 def full(pid, rid, **kw):
@@ -25,8 +27,8 @@ def mg(tmp_path, monkeypatch):
     monkeypatch.setattr(manage, "DEFAULT_SETTINGS_PATH", settings)
     out = tmp_path / "out"
 
-    def run(*argv, ok=True, answer="yes"):
-        return manage.main(["--out", str(out), *argv], validator=lambda: (ok, "" if ok else "bad data"), ask=lambda _: answer)
+    def run(*argv, ok=True, answer="yes", client=None):
+        return manage.main(["--out", str(out), *argv], validator=lambda: (ok, "" if ok else "bad data"), ask=lambda _: answer, client=client)
 
     def get(pid="demo"):
         return next(p for p in json.loads(projects.read_text())["projects"] if p["id"] == pid)
@@ -111,3 +113,41 @@ def test_list_shows_state_and_locks(mg, capsys):
     mg.run("list")
     out = capsys.readouterr().out
     assert "locked: primary_category" in out and "hidden" in out
+
+
+HEAD = "d" * 40
+
+
+def gh():
+    return FakeClient({"/repos/octo/demo": {"default_branch": "main"},
+                       "/repos/octo/demo/commits/main": {"sha": HEAD, "commit": {"committer": {"date": "2026-03-05T10:00:00Z"}}}})
+
+
+def test_log_adds_an_entry_for_the_latest_commit_and_moves_tracking_forward(mg):
+    assert mg.run("log", "demo", "Added a print button to the landing page", client=gh()) == 0
+    p = mg.get()
+    assert p["updates"][0] == {"commit": HEAD, "date": "2026-03-05", "type": "feature", "summary": "Added a print button to the landing page"}
+    assert p["last_analyzed_commit"] == HEAD and p["last_updated"] == "2026-03-05" and len(p["updates"]) == 2
+    assert mg.run("log", "demo", "Added a print button to the landing page", client=gh()) == 1      # same commit again
+
+
+def test_log_with_an_explicit_commit_does_not_move_tracking(mg):
+    assert mg.run("log", "demo", "Fixed the footer layout on phones", "--type", "fix", "--commit", "ABC1234", "--date", "2026-02-15") == 0
+    p = mg.get()
+    assert p["updates"][0]["commit"] == "abc1234" and p["updates"][0]["type"] == "fix" and p["last_analyzed_commit"] == "a" * 40
+
+
+def test_log_rejects_bad_input_and_changes_nothing(mg, capsys):
+    before = mg.projects.read_text()
+    assert mg.run("log", "demo", "short", client=gh()) == 1
+    assert mg.run("log", "demo", "A perfectly good summary here", "--type", "miracle", client=gh()) == 1
+    assert mg.run("log", "demo", "A perfectly good summary here", "--date", "2025-01-01", client=gh()) == 1
+    assert mg.run("log", "demo", "A perfectly good summary here", "--date", "not-a-date", client=gh()) == 1
+    assert mg.run("log", "demo", "A perfectly good summary here", "--commit", "xyz") == 1
+    assert mg.projects.read_text() == before
+
+
+def test_log_explains_what_to_do_when_github_cannot_be_reached(mg, capsys):
+    broken = FakeClient({"/repos/octo/demo": GitHubError(403, "rate limited", "x")})
+    assert mg.run("log", "demo", "A perfectly good summary here", client=broken) == 1
+    assert "GH_TOKEN" in capsys.readouterr().out

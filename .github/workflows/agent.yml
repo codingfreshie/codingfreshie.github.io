@@ -85,6 +85,10 @@ jobs:
       - name: Open or update the pull request
         if: steps.pending.outputs.skip != 'true' && env.DRY_RUN != 'true'
         run: |
+          if [ ! -f agent/out/open-pr ]; then
+            echo "Nothing visible on the site would change (at most, tracking positions moved). Not opening a pull request."
+            exit 0
+          fi
           if git diff --quiet -- src/data/projects.json agent/settings.json; then
             echo "No changes to propose."
             exit 0

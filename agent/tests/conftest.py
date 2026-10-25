@@ -1,4 +1,7 @@
 import base64
+import hashlib
+from pathlib import Path
+
 import pytest
 
 from agent.github_client import GitHubError, NotFound, EmptyRepository
@@ -53,3 +56,25 @@ def project(pid, rid, name=None, **kw):
     base = {"id": pid, "repository_id": rid, "repository_url": f"https://github.com/octo/{name}", "status": "active"}
     base.update(kw)
     return base
+
+
+ROOT = Path(__file__).resolve().parents[2]
+GUARDED = [ROOT / "src" / "data" / "projects.json", ROOT / "src" / "data" / "categories.json", ROOT / "agent" / "settings.json"]
+
+
+@pytest.fixture(autouse=True)
+def _ignore_the_real_environment(monkeypatch):
+    """Tests must behave the same on your laptop and inside GitHub Actions, and must never write to the real run."""
+    for name in ("GITHUB_STEP_SUMMARY", "GITHUB_OUTPUT", "GITHUB_REPOSITORY", "GH_TOKEN", "GITHUB_TOKEN",
+                 "GEMINI_API_KEY", "PORTFOLIO_GITHUB_USER"):
+        monkeypatch.delenv(name, raising=False)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _real_data_is_never_modified():
+    """Fail the whole run if any test changes a real data file instead of a temporary copy."""
+    def digest():
+        return {p.name: (hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None) for p in GUARDED}
+    before = digest()
+    yield
+    assert digest() == before, "a test modified a real data file (projects.json, categories.json or settings.json)"

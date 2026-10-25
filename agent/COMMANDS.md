@@ -34,6 +34,12 @@ python -m agent.manage pin ID description category          protect fields from 
 ```
 `set` locks the field automatically.
 
+## Adding a timeline entry yourself
+```
+python -m agent.manage log ID "Added a print button to the landing page"     (also: --type fix, --date 2026-10-25, --commit SHA)
+```
+Uses the repository's latest commit and moves tracking forward, so the agent will not propose the same commits again.
+
 ## Hiding, removing, undoing
 ```
 python -m agent.manage list

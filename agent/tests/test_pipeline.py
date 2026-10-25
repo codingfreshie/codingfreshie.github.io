@@ -39,6 +39,63 @@ def test_summary_surfaces_stale_descriptions_and_unapplied_flagged_changes(tmp_p
     assert "suspicious text" in body and "refresh run --project a" in body and "No changes." not in body
 
 
+def test_every_repo_that_was_found_but_not_added_gets_a_reason(tmp_path):
+    repos = {n: {"id": i, "full_name": f"octo/{n}"} for i, n in enumerate(["added", "deferred", "empty", "failed", "unapplied", "halfway", "lost"], 1)}
+    (tmp_path / "discovery.json").write_text(json.dumps({"new": list(repos.values()), "deferred": [repos["deferred"]]}))
+    (tmp_path / "collect_log.json").write_text(json.dumps({"octo/empty": {"status": "skipped", "detail": "empty"}}))
+    (tmp_path / "analysis_log.json").write_text(json.dumps({"octo/failed": "Gemini rate limit or quota still exceeded"}))
+    for sub_, name in [("drafts", "draft-5.json"), ("bundles", "bundle-6.json")]:
+        (tmp_path / sub_).mkdir(exist_ok=True)
+        (tmp_path / sub_ / name).write_text("{}")
+    after = {"projects": [full("added", 1)]}
+    reasons = dict(pipeline.unadded_repos(after, tmp_path, ["analyze new repositories"]))
+    assert "added" not in " ".join(reasons) and set(reasons) == {f"octo/{n}" for n in ("deferred", "empty", "failed", "unapplied", "halfway", "lost")}
+    assert "waiting its turn" in reasons["octo/deferred"] and "empty" in reasons["octo/empty"]
+    assert "rate limit" in reasons["octo/failed"] and "exclude_repos" in reasons["octo/unapplied"]
+    assert "analysis step failed" in reasons["octo/halfway"] and "not collected" in reasons["octo/lost"]
+
+
+def test_description_lists_unadded_repositories_instead_of_saying_no_changes(tmp_path):
+    (tmp_path / "discovery.json").write_text(json.dumps({"new": [{"id": 9, "full_name": "octo/newrepo"}], "deferred": []}))
+    (tmp_path / "analysis_log.json").write_text(json.dumps({"octo/newrepo": "Model 'x' was not found for this key"}))
+    data = {"projects": [full("a", 1)]}
+    body, _ = summarize(data, data, tmp_path, ["analyze new repositories"])
+    assert "Found on GitHub but not added" in body and "octo/newrepo" in body and "not found for this key" in body
+    assert "No changes." not in body
+
+
+def test_commits_that_were_checked_but_not_logged_are_explained(tmp_path):
+    before = {"projects": [full("a", 1, name="A"), full("b", 2, name="B")]}
+    after = json.loads(json.dumps(before))
+    after["projects"][0]["last_analyzed_commit"] = "c" * 40
+    after["projects"][1]["last_analyzed_commit"] = "d" * 40
+    (tmp_path / "updates").mkdir()
+    for pid, base, head, why, n in [("a", "a" * 40, "c" * 40, "not a meaningful change", 2), ("b", "a" * 40, "d" * 40, "history_rewritten", 1)]:
+        (tmp_path / "updates" / f"update-{pid}-x.json").write_text(json.dumps(
+            {"project_id": pid, "base_commit": base, "head_commit": head, "commits": n, "update": None, "flags": [], "reason": why}))
+    body, counts = summarize(before, after, tmp_path, [])
+    assert "**A**: 2 commits, not a meaningful change" in body and "history was rewritten" in body
+    assert "manage log PROJECT_ID" in body
+    assert "Only commit-tracking positions moved forward" in body and "No changes." not in body
+    assert not any(counts.values())
+
+
+def test_pull_request_marker_exists_only_for_visible_changes(tmp_path, projects_file):
+    after = json.loads(projects_file.read_text())
+    after["projects"][0]["updates"].insert(0, {"commit": "e" * 40, "date": "2026-04-01", "type": "feature", "summary": "Added something new."})
+
+    def changing(argv):
+        projects_file.write_text(json.dumps(after))
+        return 0
+    run_pipeline(tmp_path, stages=[{"name": "x", "main": changing, "args": [], "writes": True}], preview=[])
+    assert (tmp_path / "open-pr").exists()
+    run_pipeline(tmp_path, stages=[stage([], "noop", False)], preview=[])           # nothing new this time
+    assert not (tmp_path / "open-pr").exists()
+    projects_file.write_text(json.dumps({"schema_version": 1, "projects": [full("a", 1)]}))
+    run_pipeline(tmp_path, dry_run=True, stages=[{"name": "x", "main": changing, "args": [], "writes": False}], preview=[])
+    assert not (tmp_path / "open-pr").exists()                                       # a dry run never asks for one
+
+
 # ---------- running the stages ----------
 @pytest.fixture
 def projects_file(tmp_path, monkeypatch):
@@ -124,6 +181,7 @@ def test_workflow_cannot_publish_without_review_and_never_echoes_secrets(workflo
     assert "--base main" in runs and "gh pr merge" not in runs            # a human merges
     pr_step = next(step for step in steps if step.get("name") == "Open or update the pull request")
     assert "DRY_RUN" in pr_step["if"]                                       # dry runs never open one
+    assert "agent/out/open-pr" in pr_step["run"]                            # nor do runs where nothing visible changed
     assert "echo" not in "".join(l for l in runs.splitlines() if "secrets" in l or "GEMINI_API_KEY" in l or "GH_TOKEN" in l)
     agent_step = next(step for step in steps if step.get("name") == "Run the agent")
     assert agent_step["env"]["GEMINI_API_KEY"] == "${{ secrets.GEMINI_API_KEY }}"

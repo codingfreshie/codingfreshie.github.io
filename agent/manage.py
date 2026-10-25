@@ -6,6 +6,7 @@
   python -m agent.manage remove ID         delete the entry and never add that repository again
   python -m agent.manage set ID FIELD VALUE   change a field; it is locked so refresh will not overwrite it
   python -m agent.manage pin ID FIELD...   protect fields from refresh      (unpin to undo)
+  python -m agent.manage log ID "What changed"   add a timeline entry yourself (--type, --date, --commit)
   python -m agent.manage undo              restore the previous projects.json
 """
 from __future__ import annotations
@@ -107,6 +108,40 @@ def pin(project: dict, fields: list[str], lock: bool) -> list[str]:
     return names
 
 
+def fetch_head(client, project: dict) -> tuple[str, str]:
+    """The repository's current default-branch commit and its date."""
+    full = project["repository_url"].removeprefix("https://github.com/")
+    branch = client.get_json(f"/repos/{full}")["default_branch"]
+    head = client.get_json(f"/repos/{full}/commits/{branch}")
+    return head["sha"], ((head.get("commit", {}).get("committer") or {}).get("date") or "")[:10]
+
+
+def add_log_entry(project: dict, summary: str, type_: str, commit: str, date_: str, advance: bool) -> None:
+    from datetime import date as _date
+    from .changes import TYPES
+    import re
+    if type_ not in TYPES:
+        raise ManageError(f"type must be one of: {', '.join(TYPES)}")
+    text = clean_text(summary, 400)
+    if len(text) < 10:
+        raise ManageError("the summary needs to be at least a short sentence")
+    commit = commit.lower()
+    if not re.fullmatch(r"[0-9a-f]{7,40}", commit):
+        raise ManageError("commit must be a hex SHA (7 to 40 characters)")
+    try:
+        _date.fromisoformat(date_)
+    except ValueError:
+        raise ManageError("date must look like 2026-10-25")
+    if date_ < project["created_at"]:
+        raise ManageError(f"date cannot be before the project was added ({project['created_at']})")
+    if any(u["commit"].startswith(commit) or commit.startswith(u["commit"]) for u in project["updates"]):
+        raise ManageError("the timeline already has an entry for that commit")
+    project["updates"].insert(0, {"commit": commit, "date": date_, "type": type_, "summary": text})
+    project["last_updated"] = max(project["last_updated"], date_)
+    if advance:
+        project["last_analyzed_commit"] = commit      # so the tracker does not propose the same commits again
+
+
 def add_exclusion(settings_path: Path, full_name: str) -> bool:
     raw = json.loads(Path(settings_path).read_text("utf-8"))
     current = raw.setdefault("exclude_repos", [])
@@ -143,7 +178,7 @@ def render_list(data: dict) -> str:
     return "\n".join(rows)
 
 
-def main(argv: list[str] | None = None, validator=node_validator, ask=input) -> int:
+def main(argv: list[str] | None = None, validator=node_validator, ask=input, client=None) -> int:
     parser = argparse.ArgumentParser(prog="agent.manage")
     parser.add_argument("--out", type=Path, default=OUT_DIR)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -156,6 +191,10 @@ def main(argv: list[str] | None = None, validator=node_validator, ask=input) -> 
     rm.add_argument("--yes", action="store_true")
     st = sub.add_parser("set")
     st.add_argument("id"); st.add_argument("field"); st.add_argument("value")
+    lg = sub.add_parser("log")
+    lg.add_argument("id"); lg.add_argument("summary")
+    lg.add_argument("--type", default="feature"); lg.add_argument("--date", default="")
+    lg.add_argument("--commit", default="", help="default: the repository's latest commit")
     for name in ("pin", "unpin"):
         p = sub.add_parser(name)
         p.add_argument("id"); p.add_argument("fields", nargs="+")
@@ -182,6 +221,19 @@ def main(argv: list[str] | None = None, validator=node_validator, ask=input) -> 
         elif args.command == "set":
             field = set_field(project, args.field, args.value, [c["id"] for c in load_categories()])
             message = f"Set {field} on '{project['id']}'." + (" It is now locked, so refresh will not overwrite it." if field in LOCKABLE else "")
+        elif args.command == "log":
+            commit, date_ = args.commit, args.date
+            if not commit:
+                import os
+                from .github_client import GitHubClient, GitHubError
+                try:
+                    commit, head_date = fetch_head(client or GitHubClient(token=os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")), project)
+                except GitHubError as exc:
+                    raise ManageError(f"Could not read the repository's latest commit (GitHub API {exc.status}). "
+                                      "Set GH_TOKEN, or pass --commit SHA.") from exc
+                date_ = date_ or head_date
+            add_log_entry(project, args.summary, args.type, commit, date_ or project["last_updated"], advance=not args.commit)
+            message = f"Added a {args.type} entry to '{project['id']}'." + ("" if args.commit else " Tracking now continues from that commit.")
         elif args.command in ("pin", "unpin"):
             names = pin(project, args.fields, args.command == "pin")
             message = f"{'Locked' if args.command == 'pin' else 'Unlocked'}: {', '.join(names)}."
